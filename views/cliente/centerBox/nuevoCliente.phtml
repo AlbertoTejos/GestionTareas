@@ -1,0 +1,55 @@
+<div class="row">
+    <form class="form" method="post">
+        <div class="col-md-12">
+            <div class="form-group">
+                <label class="control-label">Nombre</label>
+                <input name="txtNombre" type="text" class="form-control">
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="form-group">
+                <label class="control-label">Nombre Corto</label>
+                <input type="text" name="txtNombreCorto" class="form-control">
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="form-group text-right">
+                    <button type="submit" id="btn" class="btn btn-yellow" onclick="Cliente.prototype.procesoEnviaForm('form', '<?php echo BASE_URL ?>cliente/ingresar', 'btn', '<?php echo BASE_URL ?>cliente')">Guardar</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script>
+    
+    //Validaci{on de caracteres
+    
+    $(".form-control").keypress(function (key) {
+            window.console.log(key.charCode)
+            if ((key.charCode < 97 || key.charCode > 122)//letras mayusculas
+                && (key.charCode < 65 || key.charCode > 90) //letras minusculas
+                && (key.charCode != 45) //retroceso
+                && (key.charCode != 241) //ñ
+                 && (key.charCode != 209) //Ñ
+                 && (key.charCode != 32) //espacio
+                 && (key.charCode != 225) //á
+                 && (key.charCode != 233) //é
+                 && (key.charCode != 237) //í
+                 && (key.charCode != 243) //ó
+                 && (key.charCode != 250) //ú
+                 && (key.charCode != 193) //Á
+                 && (key.charCode != 201) //É
+                 && (key.charCode != 205) //Í
+                 && (key.charCode != 211) //Ó
+                 && (key.charCode != 218) //Ú
+                 && (key.charCode != 109) //-
+                )
+                return false;
+        });
+        
+</script>
+
+
+
+
+

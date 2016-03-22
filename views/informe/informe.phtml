@@ -1,0 +1,323 @@
+<script type="text/javascript" src="<?php echo $_layoutParams['ruta_js']; ?>jquery-2.1.4.min.js"></script>
+<!--    <script src="<?php echo $_layoutParams["ruta_template"] ?>script/jquery-1.10.2.min.js"></script>-->
+    <script src="<?php echo $_layoutParams["ruta_template"] ?>script/jquery-migrate-1.2.1.min.js"></script>
+    <script src="<?php echo $_layoutParams["ruta_template"] ?>script/jquery-ui.js"></script>
+    <script src="<?php echo $_layoutParams["ruta_template"] ?>datetimepicker-master/build/jquery.datetimepicker.full.js"></script>
+    <script src="<?php echo $_layoutParams["ruta_public_js"] ?>Informe.js"></script>
+
+
+<div id="title-breadcrumb-option-demo" class="page-title-breadcrumb">
+    <div class="page-header pull-left">
+        <div class="page-title">
+             <i class="fa fa-user fa-2x" style="font-size: 30px"></i>&nbsp <?php echo $this->_titulo ?></div>
+    </div>
+    <ol class="breadcrumb page-breadcrumb pull-right">
+        <li><i class="fa fa-home"></i>&nbsp;<a href="sistema">Inicio</a>&nbsp;&nbsp;<i class="fa fa-angle-right"></i>&nbsp;&nbsp;</li>
+        <li class="hidden"><a href="#"><?php echo $this->_titulo ?></a>&nbsp;&nbsp;<i class="fa fa-angle-right"></i>&nbsp;&nbsp;</li>
+        <li class="active"><?php echo $this->_titulo ?></li>
+    </ol>
+    <div class="clearfix">
+    </div>
+</div>
+
+<div class="page-content"> 
+    <div class="row">
+    <div class="col-md-12">  
+        <form class="formBuscar" method="post" action="<?php echo BASE_URL ?>/informe/buscarHorasRealizadas">
+               <div class="row">
+        <div class="col-md-4">
+            <div class="form-group">
+                <label>Fecha de Inicio</label>
+                <input type="text" class="form-control" name="fechaIncioInicio" id="fechaIncioInicio2" onclick="mostrarCalendario()"/>
+            </div>    
+        </div>      
+    
+        <div class="col-md-4">
+            <div class="form-group">
+               <label>Fecha de T&eacute;rmino</label>
+               <input type="text" class="form-control" name="fechaTerminoInicio" id="fechaTerminoInicio2" onclick="mostrarCalendario2()"/>
+           </div>  
+        </div>
+        <div class="col-md-4" style="bottom:0px; top:22px">
+            <button type="submit" class="btn btn-primary" id="btnBuscar">BUSCAR</button>
+        </div>
+    </div> 
+        </form>
+
+    </div>
+    
+    </div>
+
+<?php
+    
+    if(Session::get('SESS_ID_TIPO_USER')!=3 )
+    {
+    
+ ?>
+
+    <br>
+    <br>
+    <div class="panel panel-grey">
+        <div class="panel-heading"><?php echo $this->_tituloPanel ?></div>
+        <div class="panel-body">
+            <div class="table-responsive">
+                <table class="table" >
+                    <thead>
+                        <tr>
+<!--                            <th><strong><center>PROFESIONAL</center></strong></th>-->
+                            <th><strong><center>TIPO</center></strong></th>
+                            <th><strong><center>HORAS</center></strong></th>
+                            <th><strong><center>FALLAS</center></strong></th>
+                            <th><strong><center>INCIDENCIAS</center></strong></th>
+                            <th><strong><center>MEJORAS</center></strong></th>
+                        </tr>
+                    </thead>
+                    <?php
+                    if ($this->_informesByProfesional) {
+                        foreach ($this->_informesByProfesional as $a) {
+                            ?>
+                            <tbody>
+                                <tr>
+<!--                                    <td><center><?php echo $a->getIdProfesional() ?></center></td>-->
+                                    <td><center><?php echo $a->getTipo() ?></center></td>
+                                    <td><center><?php echo number_format($a->getHrs(),2, ',', '.') ?></center></td>
+                                    <td><center><?php echo $a->getFallas() ?></center></td>
+                                    <td><center><?php echo $a->getIncidencias() ?></center></td>
+                                    <td><center><?php echo $a->getMejoras() ?></center></td>
+                                </tr>
+                            </tbody>
+
+                            <?php
+                        }
+                    }
+                    ?>
+
+                </table>
+            </div>
+        </div>
+    </div>
+
+<?php 
+ }  
+else
+{
+ ?>
+
+    <br>
+    <br>
+    <div class="panel panel-grey">
+        <div class="panel-heading"><?php echo $this->_tituloPanel ?></div>
+        <div class="panel-body">
+            <div class="table-responsive">
+                <table class="table" >
+                    <thead>
+                        <tr>
+                          
+                            <th><strong>TIPO</strong></th>
+                            <th><strong>HORAS</strong></th>
+                            <th><strong>FALLAS</strong></th>
+                            <th><strong>INCIDENCIAS</strong></th>
+                            <th><strong>MEJORAS</strong></th>
+                        </tr>
+                    </thead>
+                    <?php
+                    if ($this->_informesTipoProfesional) {
+                        foreach ($this->_informesTipoProfesional  as $p) {
+                            ?>
+                            <tbody>
+                                <tr>
+                                
+                                    <td><?php echo $p->getTipo() ?></td>
+                                    <td><?php echo number_format($p->getHrs(),2, ',', '.') ?></td>
+                                    <td><?php echo $p->getFallas() ?></td>
+                                    <td><?php echo $p->getIncidencias() ?></td>
+                                    <td><?php echo $p->getMejoras() ?></td>
+                                </tr>
+                            </tbody>
+                            <?php
+                        }
+                    }
+
+                    ?>
+
+                </table>
+            </div>
+        </div>
+    </div>
+
+<?php  
+}
+                        
+ ?>
+    <div class="panel panel-grey">
+        <div class="panel-heading">HORAS EJECUTADAS INGENIEROS SEGUN FECHAS SELECCIONADAS</div>
+        <div class="panel-body">
+            <div class="table-responsive">
+                <table class="table" >
+                    <thead>
+                        <tr>
+                            <th><strong><center>TOTAL HORAS</center></strong></th>
+                            <th><strong><center>TOTAL HORAS UTILIZADAS</center></strong></th>
+                            <th><strong><center>HORAS DISPONIBLES</center></strong></th>
+                        </tr>
+                    </thead>
+                    <?php
+                    if ($this->_informesTipoProfesional) {
+                      
+                            ?>
+                            <tbody>
+                                <tr>
+                                    <td><center><?php $hrs = 2000; echo  number_format($hrs,2, ',', '.')?></center></td>
+                                    <td><center><?php echo  number_format($this->_horasIngeniero,2, ',', '.')?></center></td>
+                                    <td><center><?php echo number_format($this->_horasIngenieroRestante,2, ',', '.') ?></center></td>
+                                </tr>
+                            </tbody>
+
+                            <?php
+                    }
+                    ?>
+
+                </table>
+            </div>
+            </div>
+        </div>
+    
+    
+    
+           <div class="panel panel-grey">
+        <div class="panel-heading">HORAS EJECUTADAS ANALISTAS SEGUN FECHAS SELECCIONADAS</div>
+        <div class="panel-body">
+            <div class="table-responsive">
+                <table class="table" >
+                    <thead>
+                        <tr>
+                            <th><strong><center>TOTAL HORAS</center></strong></th>
+                            <th><strong><center>TOTAL HORAS UTILIZADAS</center></strong></th>
+                            <th><strong><center>HORAS DISPONIBLES</center></strong></th>
+                        </tr>
+                    </thead>
+                    <?php
+                   if ($this->_informesTipoProfesional) {
+                      
+                            ?>
+                            <tbody>
+                                <tr>
+                                    <td><center><?php $hrs = 2000; echo  number_format($hrs,2, ',', '.')?></center></td>
+                                    <td><center><?php echo  number_format($this->_horasAnalista,2, ',', '.')?></center></td>
+                                    <td><center><?php echo number_format($this->_horasAnalistaRestante,2, ',', '.') ?></center></td>
+                                </tr>
+                            </tbody>
+
+                            <?php
+                    }
+                    ?>
+
+                </table>
+            </div>
+        </div>
+  
+    </div>
+    
+    
+               <div class="panel panel-grey">
+        <div class="panel-heading">HORAS EJECUTADAS ASESOR FINANCIERO SEGUN FECHAS SELECCIONADAS</div>
+        <div class="panel-body">
+            <div class="table-responsive">
+                <table class="table" >
+                    <thead>
+                        <tr>
+                            <th><strong><center>TOTAL HORAS</center></strong></th>
+                            <th><strong><center>TOTAL HORAS UTILIZADAS</center></strong></th>
+                            <th><strong><center>HORAS DISPONIBLES</center></strong></th>
+                        </tr>
+                    </thead>
+                    <?php
+                   if ($this->_informesTipoProfesional) {
+                      
+                            ?>
+                            <tbody>
+                                <tr>
+                                    <td><center><?php $hrs = 200; echo  number_format($hrs,2, ',', '.')?></center></td>
+                                    <td><center><?php echo  number_format($this->_horasAFiananciero,2, ',', '.')?></center></td>
+                                    <td><center><?php echo number_format($this->_horasAFinancieroRestante,2, ',', '.') ?></center></td>
+                                </tr>
+                            </tbody>
+
+                            <?php
+                    }
+                    ?>
+
+                </table>
+            </div>
+        </div>
+  
+    </div>
+  
+    </div>
+ 
+  
+
+
+
+<script>
+    //
+    function mostrarCalendario()
+    {
+       
+         jQuery.datetimepicker.setLocale('en');
+
+        jQuery('#fechaIncioInicio2').datetimepicker({
+        i18n:{
+        de:{
+        months:[
+        'Januar','Februar','März','April',
+          'Mai','Juni','Juli','August',
+          'September','Oktober','November','Dezember',
+          ],
+         dayOfWeek:[
+         "So.", "Mo", "Di", "Mi", 
+         "Do", "Fr", "Sa.",
+         ]
+         }
+         },
+        timepicker:false,
+         format:'Y.m.d'
+        });
+        
+    }
+    
+        function mostrarCalendario2()
+    {
+       
+         jQuery.datetimepicker.setLocale('en');
+
+        jQuery('#fechaTerminoInicio2').datetimepicker({
+        i18n:{
+        de:{
+        months:[
+        'Januar','Februar','März','April',
+          'Mai','Juni','Juli','August',
+          'September','Oktober','November','Dezember',
+          ],
+         dayOfWeek:[
+         "So.", "Mo", "Di", "Mi", 
+         "Do", "Fr", "Sa.",
+         ]
+         }
+         },
+        timepicker:false,
+         format:'Y/m/d'
+        });
+        
+    }
+
+
+
+
+
+
+
+  // $("#fechaIncioInicio2").datetimepicker();
+ // $("#fechaTerminoInicio2").datetimepicker();
+
+</script>

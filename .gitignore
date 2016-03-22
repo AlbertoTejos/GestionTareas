@@ -1,0 +1,5 @@
+application/
+error_log
+.svn/
+.htaccess
+nbproject/

@@ -1,0 +1,164 @@
+<script type="text/javascript" charset="utf-8">
+//evento javascript para búsqueda en combo en cascada
+
+    $("#proyecto").change(function () {
+        $("#proyecto option:selected").each(function () {
+            elegido = $(this).val();
+            $.post('<?php echo BASE_URL ?>/modulo/comboHitos/' + elegido, function (data) {
+                $("#hito").html(data);
+            });
+        });
+    });
+
+</script>
+
+<form class="formSolicitud">
+    <div class="row">
+
+        <div class="col-md-12">
+            <div class="form-group">
+                <label>Proyecto</label>
+                <select id="proyecto" class="form-control"  required>
+                    <option value="0">Seleccione un Proyecto</option>
+                    <?php
+                    if ($this->_getModulo) {
+                        foreach ($this->_getModulo as $mod) {
+                            ?>
+                            <option value="<?php echo $mod->getId_producto() ?>"><?php echo utf8_decode($mod->getNombre()) ?></option>
+                            <?php
+                        }
+                    }
+                    ?>
+                </select>
+            </div>
+        </div>
+
+        <div class="col-md-12">
+            <div class="form-group">
+                <label>Hito</label>
+                <select name="st_hito" class="form-control" id="hito" required>
+                    <option value="0">Seleccione un Módulo</option> 
+                </select>
+            </div>
+        </div>
+
+        <div class='col-md-12'>
+            <div class="form-group">
+                <label for ="it_txtNombreTicket">Trabajo Solicitado</label>
+                <input type="text" class="form-control" name="it_txtNombreTicket" id="it_txtNombreTicket"/>
+            </div>
+        </div>
+
+
+        <div class='col-md-12'>
+            <div class="form-group">
+                <label for ="it_txtaDescripcionProblema">Descripci&oacute;n del problema</label>
+                <textarea style="resize: none;" class="form-control" rows="3" name="it_txtaDescripcionProblema" id="it_txtaDescripcionProblema"></textarea>
+            </div>
+
+        </div>
+        <div class='col-md-12'>
+            <div class="form-group">
+                <label for ="it_txtaSolucionPropuesta">Soluci&oacute;n Propuesta</label>
+                <textarea style="resize: none;" class="form-control" rows="3" name="it_txtaSolucionPropuesta" id="it_txtaSolucionPropuesta"></textarea>
+            </div>
+
+        </div>
+
+
+        <div class='col-md-12'>
+            <h5><b>Evento</b></h5>
+            <div class='col-md-2'>
+                <div class="form-group">
+                    <div class="radio">
+                        <label class="label label-danger">
+                            <input type="radio" name="rdbtnTipoologia" id="rdbtnTipoologia" value="1">
+                            Falla &nbsp;  &nbsp;  &nbsp;  &nbsp; &nbsp; 
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class='col-md-2'>
+                <div class="form-group">
+                    <div class="radio">
+                        <label class="label label-warning">
+                            <input type="radio" name="rdbtnTipoologia" id="rdbtnTipoologia2" value="2">
+                            Incidencia
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class='col-md-2'>
+                <div class="form-group">
+                    <div class="radio">
+                        <label class="label label-success">
+                            <input type="radio" name="rdbtnTipoologia" id="rdbtnTipoologia3" value="3" checked>
+                            Mejora &nbsp;  &nbsp; &nbsp;
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class='col-md-12'>
+            <h5><b>Nivel</b></h5>
+            <div class='col-md-2'>
+                <div class="form-group">
+                    <div class="radio">
+                        <label class="label label-danger">
+                            <input type="radio" name="rdbtnPrioridad" id="rdbtnPrioridad1" value="1">
+                            Urgente&nbsp; &nbsp;
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class='col-md-2'>
+                <div class="form-group">
+                    <div class="radio">
+                        <label class="label label-warning">
+                            <input type="radio" name="rdbtnPrioridad" id="rdbtnPrioridad2" value="2">
+                            Alta&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class='col-md-2'>
+                <div class="form-group">
+                    <div class="radio">
+                        <label class="label label-success">
+                            <input type="radio" name="rdbtnPrioridad" id="rdbtnPrioridad3" value="3" checked>
+                            Normal&nbsp; &nbsp; &nbsp;
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-12">
+            <div class="form-group text-right">
+                <button type="button" id="btnGuardarTarea" class="btn btn-yellow" data-toggle="modal" href="#myModal" 
+                        onClick="Modulo.prototype.procesoEnviaForm('formSolicitud',
+                                        '<?php echo BASE_URL ?>modulo/insertSolicitud',
+                                        'btnGuardarTarea',
+                                        '<?php
+                        if (Session::get('SESS_ID_TIPO_USER') == 2) {
+                            echo BASE_URL . 'tarea';
+                        } else if (Session::get('SESS_ID_TIPO_USER') == 3) {
+                            echo BASE_URL . 'avance';
+                        
+                        } else if (Session::get('SESS_ID_TIPO_USER') == 1 || Session::get('SESS_ID_TIPO_USER') == 0) {
+                            echo BASE_URL . 'modulo';
+                        }
+                        ?>')" 
+                        id="btnGuardarTarea"  name="btnGuardarTarea" aria-haspopup="true" aria-expanded="false">
+                    Guardar
+                </button>
+            </div>
+        </div>
+
+
+
+    </div>
+</form>

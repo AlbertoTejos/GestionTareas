@@ -1,0 +1,169 @@
+<div id="title-breadcrumb-option-demo" class="page-title-breadcrumb">
+    <div class="page-header pull-left">
+        <div class="page-title">
+            <i class="fa fa-calendar fa-fw fa-2x" style="font-size: 30px"></i>&nbsp Administraci&oacute;n de Trabajos</div>
+    </div>
+    <ol class="breadcrumb page-breadcrumb pull-right">
+        <li><i class="fa fa-home"></i>&nbsp;<a href="sistema">Inicio</a>&nbsp;&nbsp;<i class="fa fa-angle-right"></i>&nbsp;&nbsp;</li>
+        <li class="hidden"><a href="#"><?php echo $this->_titulo ?></a>&nbsp;&nbsp;<i class="fa fa-angle-right"></i>&nbsp;&nbsp;</li>
+        <li class="active">&nbsp Administraci&oacute;n de Trabajos</li>
+    </ol>
+    <div class="clearfix">
+    </div>
+</div>
+<div class="page-content">
+    <a data-toggle="modal" href="#myModal" class="btn btn-primary" onclick="Modulo.prototype.abreModal('<?php echo BASE_URL ?>/modulo/abreInsertModulo', 'Ingrese un nuevo trabajo', '')" class="btn btn-blue">Nuevo &nbsp<span class="fa fa-plus-circle fa-fw"></span></a>
+    <br>
+    <br>
+    <div id="tab-general">
+        <div class="row mbl">          
+            <!--            <div class="col-lg-6">
+                        
+                                     <div class="panel panel-grey">
+                                                        <div class="panel-heading">
+                                                            Ingreso de Nuevo Hito</div>
+                                                        <div class="panel-body pan">
+                                                            <form class="formAdmModulo">
+                                                            <div class="form-body pal">
+                                                                <div class="form-group">
+                                                                    <div class="input-icon right">
+                                                                        <i class="fa fa-calendar"></i>
+                                                                        <input id="inputName" name="inputName" type="text" placeholder="Nombre del Hito" class="form-control" /></div>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <select class="form-control" name="selectProducto">
+                                                                        <option value="0">Seleccione Un Proyecto</option>
+            <?php
+            if ($this->_getModulo) {
+                foreach ($this->_getModulo as $admMod) {
+                    ?>
+                                                                                                <option value="<?php echo $admMod->getId_producto() ?>"><?php echo $admMod->getNombre() ?></option>  
+                                                                                        
+                    <?php
+                }
+            }
+            ?>
+                                                                    </select></div>
+                                                                
+                                                            </div>
+                                                            <div class="form-actions text-right pal">
+                                                                <a data-toggle="modal" class="btn btn-blue" id="btnInsertModulo" onClick="Modulo.prototype.procesoEnviaForm('formAdmModulo', '<?php echo BASE_URL ?>modulo/insertModulo', 'btnInsertModulo', '')">
+                                                                    Guardar</a>
+                                                            </div>
+                                                            </form>
+                                                        </div>
+                                                    </div> 
+                                
+                            </div>-->
+
+            <?php if ($this->_getModuloAdm) {
+                ?>
+                <div class="col-lg-12">
+                    <div class="panel panel-grey">
+                        <div class="panel-heading">Trabajos</div>
+                        <div class="panel-body">
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th>Trabajo</th>
+                                            <th>Proyecto</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php
+                                        foreach ($this->_getModuloAdm as $modDb) {
+                                            ?>   
+                                            <tr>
+                                                <td><a onclick="Modulo.prototype.abreModal('<?php echo BASE_URL ?>modulo/abreModificaModulo/<?php echo $modDb->getIdHito() ?>', 'Modificar Trabajo', '')" data-toggle="modal" href="#myModal" class="btn btn-success"><span class="fa fa-search-plus"></span></a></td>
+                                                <td><?php echo $modDb->getNombre() ?></td>
+                                                <td><?php echo $modDb->getNombreProducto() ?></td>          
+                                            </tr> 
+                                            <?php
+                                        }
+                                        ?>
+
+
+
+                                    </tbody>
+                                </table> 
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            <?php } ?>
+
+
+
+        </div>
+
+    </div>
+    <div class="text-center">
+        <ul class="pagination pagination-lg mtm mbm">
+
+
+            <li id="atras" ><a href="#" onclick="irAtras()">&laquo;</a></li>
+            <?php
+            for ($index = 0; $index < $this->_paginas; $index++) {
+
+                if (($index + 1) == $this->_paginaSeleccionada) {
+                    ?>
+                    <li class="active">
+                        <?php
+                    } else {
+                        ?>
+                    <li>
+                    <?php }
+                    ?>
+                    <a class="num" onclick="" 
+                       value="<?php echo BASE_URL ?>modulo/abreAdmModulo?pag=<?php echo $index + 1 ?>" href="<?php echo BASE_URL ?>modulo/abreAdmModulo?pag=<?php echo $index + 1 ?>"><?php echo $index + 1 ?></a>
+                </li>
+                <?php
+            }
+            ?>
+            <li id="adelante"><a onclick="irAdelante()" href="#">&raquo;</a></li>
+
+        </ul>
+    </div>
+</div>
+
+<script>
+
+    function irAdelante() {
+
+        //obtenemos la pagina actual
+        var num = $('li.active > .num').text();
+
+        var next = parseInt(num) + 1;
+
+        var total = <?php echo $this->_paginas ?>;
+
+        if (next <= total) {
+            window.location.href = "<?php echo BASE_URL ?>/modulo/abreAdmModulo?pag=" + next;
+        } else {
+            $('#adelante').addClass('disabled');
+        }
+    }
+
+
+    function irAtras() {
+        //obtenemos la pagina actual
+        var num = $('li.active > .num').text();
+
+        var back = parseInt(num) - 1;
+
+        if (back >= 1) {
+            window.location.href = "<?php echo BASE_URL ?>/modulo/abreAdmModulo?pag=" + back;
+        } else {
+            $('#atras').addClass('disabled');
+        }
+
+    }
+
+</script>
+
+</div>
+
+

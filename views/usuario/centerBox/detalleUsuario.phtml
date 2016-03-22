@@ -1,0 +1,66 @@
+<form class="formModulo">  
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-group">
+                <label>ID</label>
+                <input type="text" readonly="true" class="form-control" name="txtId" value="<?php echo $this->_usuario[0]->getIduser()?>">
+            </div>  
+        </div>
+        <div class="col-md-12">
+            <div class="form-group">
+                <label>Nombre de usuario</label>
+                <input type="text" class="form-control" name="txtNombreDeUsuario" value="<?php echo $this->_usuario[0]->getUsername()?>">
+            </div>  
+        </div>
+        <div class="col-md-12">
+            <div class="form-group">
+                <label>Contraseña</label>
+                <input type="text" class="form-control" name="txtPass" value="<?php echo $this->_usuario[0]->getPassword()?>">
+            </div>  
+        </div>
+        <div class="col-md-12">
+            <div class="form-group">
+                <label>Fecha de registro</label>
+                <input type="text" readonly="true" class="form-control" name="txtFechaRegistro" value="<?php echo $this->_usuario[0]->getFechacreacion()?>">
+            </div>  
+        </div>
+        <div class="col-md-12">
+            <div class="form-group">
+                <label>Perfil</label>
+                <?php 
+                    switch ($this->_usuario[0]->getPerfil_idperfil()) {
+                        case 0: ?> <input type="text" class="form-control" name="txtPerfil" value="Super Administrador">
+                        <?php break;
+                        case 1: ?> <input type="text" class="form-control" name="txtPerfil" value="Administrador">
+                        <?php break;
+                        case 2: ?> <input type="text" class="form-control" name="txtPerfil" value="Desarrollador">
+                        <?php break;
+                        case 3: ?> <input type="text" class="form-control" name="txtPerfil" value="Cliente">
+                        <?php default:
+                            break;
+                    }
+                ?>
+                
+            </div>  
+        </div>
+        <div class="col-md-12">
+            <div class="form-group">
+                <label>Correo</label>
+                <input type="text" class="form-control" name="txtCorreo" value="<?php echo $this->_usuario[0]->getEmail()?>">
+            </div>  
+        </div>
+        <input type="hidden" name="txtIdPerfil" value="<?php echo $this->_usuario[0]->getPerfil_idPerfil()?>">
+        <br>
+    </div>
+    <div class="col-lg-12">
+        <div class="form-group text-right">
+            <!--<a href="#" onclick="abreDetalle()" class="btn btn-primary">&nbsp;  &nbsp; Ver Detalle   &nbsp;  &nbsp;</a>-->
+            <a class="btn btn-success" id="btnModifica" onclick="Usuario.prototype.procesoEnviaForm('formModulo', '<?php echo BASE_URL ?>usuario/modificar', 'btnModifica', '<?php echo BASE_URL ?>usuario')">Modificar</a>
+            <button class="btn btn-danger" disabled="true" id="btnElimina" onclick="Usuario.prototype.procesoEnviaForm('formModulo', '<?php echo BASE_URL ?>usuario/eliminar', 'btnElimina', '<?php echo BASE_URL ?>usuario')">Eliminar</button>
+        </div>
+    </div>
+    <br>
+    </form>
+
+
+

@@ -1,0 +1,122 @@
+<div class="row">
+    <form class="form" method="post">
+        <div class="col-md-6">
+            <div class="form-group">
+                <!--<div class="input-icon left">-->
+                <!--                    <label class="control-label">Nombre de Usuario</label>-->
+                <i class=""></i>
+                <input name="txtNombre" type="text" class="form-control" placeholder="Nombre">
+                <!--</div>-->
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <!--<div class="input-icon left">-->
+                <!--                    <label class="control-label">Nombre de Usuario</label>-->
+                <i class=""></i>
+                <input name="txtApellido" type="text" class="form-control" placeholder="Apellido">
+                <!--</div>-->
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="form-group">
+                <div class="input-icon left">
+                    <!--                    <label class="control-label">Nombre de Usuario</label>-->
+                    <i class="fa fa-user"></i>
+                    <input name="txtNombreDeUsuario" type="text" class="form-control" placeholder="Nombre de usuario">
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="form-group">
+                <div class="input-icon left">
+                    <!--                    <label class="control-label">Contrase&ntilde;a</label>-->
+                    <i class="fa fa-lock"></i>
+                    <input type="text" name="txtPass" class="form-control" placeholder="Contraseña">
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-12">
+            <div class="form-group">
+                <div class="input-icon left">
+                    <!--                    <label class="control-label">Correo</label>-->
+                    <i class="fa fa-envelope"></i>
+                    <input type="email" name="txtCorreo" class="form-control" placeholder="Correo">
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="form-group">
+                <select class="form-control" name="selTipo">
+                    <option value="">Seleccione el perfil</option>
+                    <option value="0">Super Administrador</option>
+                    <option value="1">Administrador</option>
+                    <option value="3">Cliente</option>
+                    <option value="2">Cliente Interno</option>
+                </select>
+
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="form-group">
+                <select class="form-control" name="selTipoTra">
+                    <option value="0">Seleccione el tipo de trabajador</option>
+                    <option value="A">Analista Desarrollador</option>
+                    <option value="I">Ingeniero</option>
+                    <option value="F">Asesor Financiero</option>
+                </select>
+
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="form-group text-right">
+                <button type="submit" id="btn" class="btn btn-yellow" onclick="Usuario.prototype.procesoEnviaForm('form', '<?php echo BASE_URL ?>usuario/ingresar', 'btn', '<?php echo BASE_URL ?>usuario')">Guardar</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script>
+
+    //Validaci{on de caracteres
+
+    $(".form-control").keypress(function (key) {
+        window.console.log(key.charCode)
+        if ((key.charCode < 97 || key.charCode > 122)//letras mayusculas
+                && (key.charCode < 46 || key.charCode > 90) //letras minusculas
+                && (key.charCode != 58)
+                && (key.charCode != 59)
+                && (key.charCode != 60)
+                && (key.charCode != 61)
+                && (key.charCode != 62)
+                && (key.charCode != 63)
+                && (key.charCode != 45)
+                && (key.charCode != 45) //retroceso
+                && (key.charCode != 241) //ñ
+                && (key.charCode != 209) //Ñ
+                && (key.charCode != 32) //espacio
+                && (key.charCode != 225) //á
+                && (key.charCode != 233) //é
+                && (key.charCode != 237) //í
+                && (key.charCode != 243) //ó
+                && (key.charCode != 250) //ú
+                && (key.charCode != 193) //Á
+                && (key.charCode != 201) //É
+                && (key.charCode != 205) //Í
+                && (key.charCode != 211) //Ó
+                && (key.charCode != 218) //Ú
+                && (key.charCode != 109) //-
+                )
+            return false;
+    });
+
+    
+</script>
+
+
+
+
+
+
+

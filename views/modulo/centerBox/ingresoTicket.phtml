@@ -1,0 +1,140 @@
+<div class="container">
+    <form class="formIngresoTicket">
+    <div class="row">
+        <div class='col-md-12'>
+            <div class="row">
+                <div class='col-md-8'>
+                    <div class="form-group">
+                        <label for ="it_txtNombreTicket">Tarea Solicitada</label>
+                        <input type="text" class="form-control" name="it_txtNombreTicket" id="it_txtNombreTicket"/>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="row">
+                <div class='col-md-8'>
+                    <div class="form-group">
+                        <label for ="it_txtFormularioObjetivo">Formulario</label>
+                        <input type="text" class="form-control" name="it_txtFormularioObjetivo" id="it_txtFormularioObjetivo"/>
+                    </div>
+                </div>
+
+            </div>
+
+
+            <div class="row">
+                <div class='col-md-8'>
+                    <div class="form-group">
+                        <label for ="it_txtaDescripcionProblema">Descripci&oacute;n del problema</label>
+                        <textarea class="form-control" rows="3" name="it_txtaDescripcionProblema" id="it_txtaDescripcionProblema"></textarea>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="row">
+                <div class='col-md-8'>
+                    <div class="form-group">
+                        <label for ="it_txtaSolucionPropuesta">Soluci&oacute;n Propuesta</label>
+                        <textarea class="form-control" rows="3" name="it_txtaSolucionPropuesta" id="it_txtaSolucionPropuesta"></textarea>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class= "row">
+                <div class='col-md-8'>
+                    <div class="form-group">
+                        <label for ="it_txtaFlujoCorrecto">Flujo Correcto</label>
+                        <textarea class="form-control" rows="3" name="it_txtaFlujoCorrecto" id="it_txtaFlujoCorrecto"></textarea>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="row">
+                <div class='col-md-6'>
+                    <h5><b>Tipolog&iacute;a:</b></h5>
+                    <div class='col-md-2'>
+                        <div class="form-group">
+                            <div class="radio">
+                                <label class="label label-danger">
+                                    <input type="radio" name="rdbtnTipoologia" id="rdbtnTipoologia" value="1">
+                                    Falla &nbsp;  &nbsp;  &nbsp;  &nbsp; &nbsp; 
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class='col-md-2'>
+                        <div class="form-group">
+                            <div class="radio">
+                                <label class="label label-warning">
+                                    <input type="radio" name="rdbtnTipoologia" id="rdbtnTipoologia2" value="2">
+                                    Incidencia
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class='col-md-2'>
+                        <div class="form-group">
+                            <div class="radio">
+                                <label class="label label-success">
+                                    <input type="radio" name="rdbtnTipoologia" id="rdbtnTipoologia3" value="3" checked>
+                                    Mejora &nbsp;  &nbsp; &nbsp;
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="row">
+                <div class='col-md-6'>
+                    <h5><b>Prioridad:</b></h5>
+                    <div class='col-md-2'>
+                        <div class="form-group">
+                            <div class="radio">
+                                <label class="label label-danger">
+                                    <input type="radio" name="rdbtnPrioridad" id="rdbtnPrioridad1" value="1">
+                                    Urgente&nbsp; &nbsp;
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class='col-md-2'>
+                        <div class="form-group">
+                            <div class="radio">
+                                <label class="label label-warning">
+                                    <input type="radio" name="rdbtnPrioridad" id="rdbtnPrioridad2" value="2">
+                                    Alta&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class='col-md-2'>
+                        <div class="form-group">
+                            <div class="radio">
+                                <label class="label label-success">
+                                    <input type="radio" name="rdbtnPrioridad" id="rdbtnPrioridad3" value="3" checked>
+                                    Normal&nbsp; &nbsp; &nbsp;
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+         <div class ="row">
+            <div class="btn-group">
+                <button type="button" class="btn btn-success" data-toggle="modal" href="#myModal" onClick="Modulo.prototype.procesoEnviaForm('formIngresoTicket','<?php echo BASE_URL?>modulo/insertTicket', 'btnGuardarTarea','<?php echo BASE_URL?>modulo')" id="btnGuardarTarea"  name="btnGuardarTarea" aria-haspopup="true" aria-expanded="false">
+                    Guardar
+                </button>
+            </div>
+         </div>
+        </div>
+    </div>
+    </div>

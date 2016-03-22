@@ -1,0 +1,28 @@
+<div class="container">
+
+    <div class="row">
+        <form class="formOrganizacion">
+            <div class="col-md-7">
+                <div class="form-group">
+                    <label>Nombre Organizaci&oacute;n</label>
+                    <input type="text" id="txt_nombreOrganizcion" name="txt_nombreOrganizcion" class="form-control"> 
+                </div>
+                <div id="alerta">
+                </div>
+
+
+            </div>
+            <div class="col-md-7">
+                <div class="form-group">
+
+                    <a id="botonEnviar" class="btn btn-primary"
+                       onclick="Sistema.prototype.procesoEnviaFormOrganizacion('formOrganizacion', '<?php echo BASE_URL ?>sistema/insertOrganizacion', 'botonEnviar', 'alerta')"
+                       > Enviar</a>
+                </div>
+
+
+            </div>
+        </form>    
+
+    </div>
+</div>

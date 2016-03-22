@@ -1,0 +1,233 @@
+<style>
+    /*     Let's get this party started 
+        ::-webkit-scrollbar {
+            width: 12px;
+        }
+    
+         Track 
+        ::-webkit-scrollbar-track {
+            -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
+            -webkit-border-radius: 10px;
+            border-radius: 10px;
+        }
+    
+         Handle 
+        ::-webkit-scrollbar-thumb {
+            -webkit-border-radius: 10px;
+            border-radius: 10px;
+            background: #3a6f9f; 
+            -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); 
+        }
+        ::-webkit-scrollbar-thumb:window-inactive {
+            background: #3a6f9f; 
+        }*/
+</style>
+<div id="title-breadcrumb-option-demo" class="page-title-breadcrumb">
+    <div class="page-header pull-left">
+        <div class="page-title">
+            <?php echo "Monitor de Tareas" ?></div>
+    </div>
+    <ol class="breadcrumb page-breadcrumb pull-right">
+        <li><i class="fa fa-home"></i>&nbsp;<a href="sistema">Inicio</a>&nbsp;&nbsp;<i class="fa fa-angle-right"></i>&nbsp;&nbsp;</li>
+        <li class="hidden"><a href="#">M&oacute;dulos</a>&nbsp;&nbsp;<i class="fa fa-angle-right"></i>&nbsp;&nbsp;</li>
+        <li class="active">M&oacute;dulos</li>
+    </ol>
+    <div class="clearfix">
+    </div>
+</div>
+<div class="page-content">
+    <ul class="nav nav-tabs responsive" style="background-color: #fff;">
+        <li><a  href="<?php echo BASE_URL ?>modulo?orden=fecha&b=f">Por fecha</a></li>
+        <li><a href="<?php echo BASE_URL ?>modulo?orden=prioridad&b=n">Por prioridad</a></li>
+    </ul>
+    <br>
+    <?php if (@!empty($this->_moduloProyecto)) { ?>
+        <?php $cont = 0; ?>
+        <div class="row"><?php foreach ($this->_moduloProyecto as $modProy) { ?>
+                <?php
+                $cont++;
+                if ($this->_tarea->getTarea($modProy->getIdHito(), $this->_orden)) {
+                    ?>
+
+                    <div class="col-lg-3" id="panelModulo">
+                        <div class="panel">
+                            <div class="panel-heading" id="asd" onclick="mostrarTareas('tarea<?php echo $cont ?>')" style="cursor: pointer">
+                                <!--<div class="form-actions text-center">-->
+                                <center><?php echo utf8_decode($modProy->getNombre()) ?></center>
+                                <!--</div>-->
+                            </div>
+
+
+                            <div class="panel-body pal" id="tarea<?php echo $cont; ?>">
+                                <?php
+                                if (!empty($this->_tarea)) {
+                                    foreach ($this->_tarea->getTarea($modProy->getIdHito(), $this->_orden) as $tareaProd) {
+                                        ?>  
+                                        <div  id="<?php echo $tareaProd->getIdTarea() ?>" onclick="guardarID(<?php echo $tareaProd->getIdTarea() ?>)">
+
+                                            <a data-toggle="modal" href="#myModal" onClick="Modulo.prototype.abreModal('<?php echo BASE_URL ?>modulo/abreInfoTicket/<?php echo $tareaProd->getIdTarea() ?>', 'Informaci&oacute;n de la Tarea', '<?php echo $tareaProd->getIdTarea() ?>')">
+
+
+                                                <ul class="list-group">
+                                                    <?php if ($tareaProd->getId_nivel() == 1) { ?>
+                                                        <li class="list-group-item" style="background-color: #dc6767; color: white;"><b><?php echo htmlentities($tareaProd->getNombre(), ENT_QUOTES, 'UTF-8') ?></b></li>
+                                                    <?php } ?>
+                                                    <?php if ($tareaProd->getId_nivel() == 2) { ?>
+                                                        <li class="list-group-item" style="background-color: #f0ad4e; color: white;"><b><?php echo htmlentities($tareaProd->getNombre(), ENT_QUOTES, 'UTF-8') ?></b></li>
+
+                                                    <?php } ?>
+                                                    <?php if ($tareaProd->getId_nivel() == 3) { ?>
+                                                        <li class="list-group-item" style="background-color: #5cb85c; color: white;"><b><?php echo htmlentities($tareaProd->getNombre(), ENT_QUOTES, 'UTF-8') ?></b></li>
+
+                                                    <?php }
+                                                    ?>
+                                                    <li class="list-group-item">&nbsp;Estado: <?php echo $tareaProd->getNombre_estado() ?></li>
+                    <!--                                                <li class="list-group-item"><i class=""></i><i class="fa fa-clock-o"></i>&nbsp 
+                                                    <?php
+                                                    if ($tareaProd->getHorasEstimadas() != null && $tareaProd->getHorasEstimadas() > 0) {
+                                                        echo $tareaProd->getHorasEstimadas();
+                                                    } else {
+                                                        echo 'Sin';
+                                                    }
+                                                    ?> horas estimadas</li>  -->
+                                                    <li class="list-group-item"><i class=""></i><i class="fa fa-clock-o"></i>Fecha t&eacute;rmino: 
+                                                        <?php
+                                                        if ($tareaProd->getFechaTermino() != null && $tareaProd->getFechaTermino() > 0) {
+                                                            echo date("m-d-Y H:i:s", strtotime($tareaProd->getFechaTermino()));
+                                                        } else {
+                                                            echo 'Sin fecha de término';
+                                                        }
+                                                        ?>
+                                                        <!--                                                <li class="list-group-item">
+                                                        <?php if ($tareaProd->getCantidadDeRecursos() == 1) { ?>
+                                                                                                                                            <i class="fa fa-user">&nbsp;<?php echo $tareaProd->getCantidadDeRecursos() ?> </i>&nbsp; &nbsp; recurso en esta tarea
+                                                        <?php } else { ?>
+                                                                                                                                            <i class="fa fa-users">&nbsp;<?php echo $tareaProd->getCantidadDeRecursos() ?> </i>&nbsp; &nbsp; recursos en esta tarea
+                                                                                                                                        
+                                                        <?php } ?>
+                                                                                                                </li>-->
+                                                </ul>
+
+
+                                            </a>
+
+                                        </div>       
+                                    <?php } ?>
+                                <?php } ?>
+
+                            </div>
+                        </div>
+
+                    </div>
+                <!--<button onclick="bloquearDiv();">asdasda</button>-->
+
+                <?php } else { ?>
+                    <div class="col-lg-3" id="panelModulo">
+                        <div class="panel">
+                            <div class="panel-heading" id="asd" onclick="mostrarTareas('tarea<?php echo $cont ?>')" style="cursor: pointer">
+                                <!--<div class="form-actions text-center">-->
+                                <center><?php echo $modProy->getNombre() ?></center>
+                            <!--</div>-->
+                            </div>
+                            <div class="form-body pal"><i class="fa fa-info-circle"></i>&nbsp; No posee tareas asignadas</div>
+                        </div>
+                    </div>
+
+                <?php } ?>
+
+                <!-- hasta aca itera modulos -->
+            <?php } ?>
+
+        <?php } ?>
+    </div>
+</div>
+
+
+<script>
+
+
+    function crearDiv(id) {
+
+        //creamos el div
+        $('<input>').attr({
+            type: 'text',
+            id: id,
+            name: 'bar',
+            class: 'barr'
+        }).appendTo('#panelModulo');
+
+    }
+
+    //seteado al iniciar la carga del jquery para verificar el inicio correcto, alertar en caso de errores si es que hay alguno (consola) console.log
+    //por defecto. Alertas setean mal las variables y el programa se cae. Documentar si es que hay alguna falla. Documentar si es que hay alguna mejora 
+    //por iniciar
+    
+    //sistema sincrono que soporte mas de un usuario concurrente
+    
+    function bloquearDiv() {
+
+        //144
+        var idHidden = $('.barr').attr('id');
+        
+        console.log(idHidden);
+
+        $("#" + idHidden).prop('disabled', true);
+
+    }
+
+    var idDivABloquear;
+
+    function guardarID(id) {
+//        var idx = $('#' + id).attr('id');
+        idDivABloquear = id;
+    }
+
+    var count = 0;
+    var foo = false;
+    function mostrarTareas(idx) {
+
+        //alert('antes' + count);
+        //count -= 3;
+        //alert('despues' + count);
+        $("#" + idx).fadeIn(1000);
+        //foo = true;
+        //alert('seleccion true');
+
+//        } else {
+//            
+//            if (!foo) {
+//                ocultarTareas(idx, ID);
+//                count += 3;
+//                //alert('despues de ocultar sin seleccion antes' + count);
+//                foo = false;
+//            } else {
+//                
+//                ocultarTareas(idx, ID);
+//                count += 1;
+//                //alert('despues de ocultar con seleccion antes' + count);
+//                foo = false;
+//            }
+//        }
+        // }
+    }
+    function ocultarTareas(idx, ID) {
+        $("#" + ID).attr("disabled", "disabled");
+        $("#" + idx).fadeOut(1000, function () {
+            $("#" + ID).removeAttr("disabled");
+        });
+    }
+
+    function dejarSeleccionado(idBtn) {
+        var id = $(elemento).attr("id");
+        $("#" + id).fadeOut(1000);
+
+    }
+
+
+
+</script>
+<!--END TITLE & BREADCRUMB PAGE-->
+<!--BEGIN CONTENT-->
+
+
+

@@ -1,0 +1,213 @@
+<?php
+$cont = 0;
+$cont2 = 0;
+?>
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            <label>Tarea</label>
+            <input type="text" readonly="true" class="form-control" name="" value="<?php echo $this->_It_tarea ?>">
+        </div>  
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            <label>Asignada por: </label>
+            <input type="text" readonly="true" class="form-control" name="" value="<?php echo $this->_It_nombre_admin_asigna ?>">
+        </div>  
+    </div>
+
+    <div class="col-md-4">
+        <div class="form-group">
+            <?php if ($this->_fechaAsignacion != null || $this->_fechaAsignacion != "") { ?><label id="lblEstadoIniciada">Estado Tarea:</label> <input type="text" readonly="true" class='form-control' id="txtEstadoIniciada" value='Tarea Iniciada'><?php } ?>
+            <?php if ($this->_fechaInicio != null || $this->_fechaInicio != "") { ?> <label id="lblEstadoProceso">Estado Tarea:</label><input type="text" readonly="true" class='form-control' id="txtEstadoProceso" value='Tarea En Proceso'><?php } ?>
+            <?php if ($this->_fechaFinalizacion != null || $this->_fechaFinalizacion != "") { ?> <label id="lblEstadoFinalizada">Estado Tarea:</label><input type="text" readonly="true" class='form-control' id="txtEstadoFinalizada" value='Tarea Finalizada'><?php } ?>
+
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="form-group">
+            <label>Evento</label>
+            <input type="text" readonly="true" class="form-control" name="" value="<?php echo $this->_It_nombre_evento ?>">
+        </div>  
+    </div>
+    <div class="col-md-4">
+        <div class="form-group">
+            <label>Nivel</label>
+            <input type="text" readonly="true" class="form-control" name="" value="<?php echo $this->_It_nombre_nivel ?>">
+        </div>  
+    </div>
+    <?php if ($this->_It_horas_efectivas != null) { ?>
+        <div class="col-md-4">
+            <div class="form-group">
+                <label>Horas Efectivas Trabajadas</label>
+                <input type="text" readonly="true" class="form-control" name="" value="<?php echo substr($this->_It_horas_efectivas, -8) ?>">
+            </div>  
+        </div> 
+    <?php } else { ?>
+        <div class="col-md-4">
+            <div class="form-group">
+                <label>Horas Estimadas</label>
+                <input type="text" readonly="true" class="form-control" name="" value="<?php echo $this->_It_horas_estimadas ?>">
+            </div>  
+        </div> 
+    <?php } ?>
+    <div class="col-md-4">
+        <div class="form-group">
+            <label>Fecha Inicio</label>
+            <input type="text" readonly="true" class="form-control" name="" value="<?php echo date("d-m-Y H:i:s", strtotime($this->_It_fecha_inicio)) ?>">
+        </div>  
+    </div> 
+    <div class="col-md-4">
+        <div class="form-group">
+            <label>Fecha Término</label>
+            <input type="text" readonly="true" class="form-control" name="" value="<?php echo date("d-m-Y H:i:s", strtotime($this->_It_fecha_termino)) ?>">
+        </div>  
+    </div> 
+    <!--         <div class="col-md-12">
+                <div class="form-group">
+                    <label>Formulario</label>
+                    <input type="text" readonly="true" class="form-control" name="txtId" value="<?php echo $this->_It_formulario ?>">
+                </div>  
+            </div>   -->
+    <div class="col-md-12">
+        <div class="form-group">
+            <label>Descripción del problema</label>
+            <textarea style="resize: none;" readonly="true" class="form-control" name=""><?php echo $this->_It_descripcion_problema ?></textarea>
+        </div>  
+    </div>
+    <!--    <div class="col-md-12">
+            <div class="form-group">
+                <label>Solución Propuesta</label>
+                <textarea readonly="true" class="form-control" name=""><?php echo $this->_It_solucion_propuesta ?></textarea>
+            </div>  
+        </div>
+        <div class="col-md-12">
+            <div class="form-group">
+                <label>Flujo Correcto</label>
+                <textarea type="text" readonly="true" class="form-control" name=""><?php echo $this->_It_flujo_correcto ?></textarea>
+            </div>  
+        </div>-->
+
+
+    <!--        <div class="col-md-12">
+    
+                <button onclick="verDetalle();" class="btn btn-primary">Ver Detalle</button>
+                <div id="detalle" style="display: none;">
+                    <br>
+                    <button onclick="cerrarDetalle();" class="btn btn-primary">Ocultar Detalle</button>
+    
+                    <div class="form-group">
+                        <br>
+                        <textarea class="form-control" readonly="true"><?php echo $this->_It_descripcion_problema ?></textarea>
+                    </div>
+    
+                </div>
+    
+            </div>-->
+    <div class="form-group text-right">
+
+
+        <div class="col-md-12" id="finalizado" style="display: none;">
+            <div class="row">
+                <div class="col-md-12" >
+                    <a class='btn btn-yellow' id='btnFinalizado' onclick="Tarea.prototype.procesoEnviaForm('form-it', '<?php echo BASE_URL ?>tarea/finalizarTarea/<?php echo $this->_It_id_tarea ?>/<?php echo $this->_It_tarea ?>', 'btnFinalizado', '<?php echo BASE_URL ?>tarea')">Finalizar &nbsp;<span class='fa fa-check-circle'></span></a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!--En el caso de estar la tarea pausada, habilitamos el control "continuar"-->
+    <?php if ($this->_It_estado_avance == "T") { ?>
+        <div class="col-md-10" id="pausar" style="">
+            <div class="row">
+                <div class="col-md-12" >
+                    <a class='btn btn-yellow' id='btnPausar' onclick="Tarea.prototype.procesoEnviaForm('form-it', '<?php echo BASE_URL ?>tarea/pausarTarea/<?php echo $this->_It_id_tarea ?>/<?php echo $this->_It_tarea ?>', 'btnPausar', '<?php echo BASE_URL ?>tarea')">Pausar &nbsp;<span class='fa fa-pause'></span></a>
+                </div>
+
+            </div>
+        </div>
+    <?php } ?>
+    <!--En el caso de estar la tarea en trabajo, habilitamos el control "pausar"-->
+    <?php if ($this->_It_estado_avance == "P") { ?>
+        <div class="col-md-10" id="continuar" style="">
+            <div class="row">
+                <div class="col-md-12" >
+                    <a class='btn btn-yellow' id='btnContinuar' onclick="Tarea.prototype.procesoEnviaForm('form-it', '<?php echo BASE_URL ?>tarea/continuarTarea/<?php echo $this->_It_id_tarea ?>/<?php echo $this->_It_tarea ?>', 'btnContinuar', '<?php echo BASE_URL ?>tarea')">Continuar &nbsp; <span class='fa fa-caret-square-o-right'></span></a>
+                </div>
+
+            </div>
+        </div>
+    <?php } ?>
+
+    <div class="form-group text-right">
+        <div class="col-md-12" id="iniciado" style="display: none;">
+            <div class="row">
+                <div class="col-md-12" >
+                    <a class='btn btn-yellow' id='btnIniciado' onclick="Tarea.prototype.procesoEnviaForm('form-it', '<?php echo BASE_URL ?>tarea/iniciarTarea/<?php echo $this->_It_id_tarea ?>', 'btnIniciado', '<?php echo BASE_URL ?>tarea')">Iniciar <span class='fa fa-check-circle'></span></a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>  
+
+
+
+
+<script>
+
+    function verDetalle() {
+        $("#detalle").show();
+    }
+    function cerrarDetalle() {
+        $("#detalle").hide();
+    }
+
+    var textoIniciada = $('#txtEstadoIniciada').val();
+    var textoProceso = $('#txtEstadoProceso').val();
+    var textoFinalizada = $('#txtEstadoFinalizada').val();
+
+    if (textoIniciada === 'Tarea Iniciada') {
+        $("#iniciado").show();
+        $("#finalizado").hide();
+        $('#txtEstadoIniciada').show();
+        $('#lblEstadoIniciada').show();
+        $("#txtEstadoProceso").hide();
+        $("#lblEstadoProceso").hide();
+        $("#txtEstadoFinalizada").hide();
+        $("#lblEstadoFinalizada").hide();
+    }
+    if (textoProceso === 'Tarea En Proceso') {
+        $("#iniciado").hide();
+        $("#finalizado").show();
+        $('#txtEstadoIniciada').hide();
+        $('#lblEstadoIniciada').hide();
+        $("#txtEstadoProceso").show();
+        $("#lblEstadoProceso").show();
+        $("#txtEstadoFinalizada").hide();
+        $("#lblEstadoFinalizada").hide();
+    }
+    if (textoFinalizada === 'Tarea Finalizada') {
+        $("#iniciado").hide();
+        $("#finalizado").hide();
+        $('#txtEstadoIniciada').hide();
+        $('#lblEstadoIniciada').hide();
+        $("#txtEstadoProceso").hide();
+        $("#lblEstadoProceso").hide();
+        $("#txtEstadoFinalizada").show();
+        $("#lblEstadoFinalizada").show();
+        $("#continuar").hide();
+        $("#pausar").hide();
+    }
+
+
+
+
+
+
+</script>
+
+
+
+

@@ -1,0 +1,41 @@
+
+
+<div class="row">
+    <form class="formAdmInsert">
+        <div class="col-md-12">
+            <div class="form-group">
+                <label>Nombre del Trabajo</label>
+                <input type="text" name="inputName" class="form-control">
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="form-group">
+                <label>Proyecto</label>
+                <select class="form-control" name="selectProducto">
+                    <option value="0">Seleccione un Proyecto</option>
+                    <?php
+                    if ($this->_getModulo) {
+                        foreach ($this->_getModulo as $admMod) {
+                            ?>
+                            <option value="<?php echo $admMod->getId_producto() ?>"><?php echo $admMod->getNombre() ?></option>  
+
+                            <?php
+                        }
+                    }
+                    ?>
+                </select>
+
+            </div>
+
+        </div>
+        <div class="col-md-12" >
+            <div class="form-group text-right">
+                <a data-toggle="modal" class="btn btn-yellow" id="btnInsertModulo" onClick="Modulo.prototype.procesoEnviaForm('formAdmInsert', '<?php echo BASE_URL ?>modulo/insertModulo', 'btnInsertModulo', '<?php echo BASE_URL ?>modulo/abreAdmModulo')">
+                    Guardar</a
+            </div>
+        </div>
+    </form>
+</div>
+
+
+

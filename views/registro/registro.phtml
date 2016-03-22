@@ -1,0 +1,148 @@
+<html>
+    <head>
+        <title><?php echo $this->titulo; ?></title>
+        <meta http-equiv="Content-Type" content="text/html" charset="utf8">
+        <link href="<?php echo $_layoutParams['ruta_css']; ?>bootstrap-theme.css" rel="stylesheet" type="text/css">
+<!--        <link href="<?php echo $_layoutParams['ruta_css']; ?>bootstrap-theme.min.css" rel="stylesheet" type="text/css">-->
+<!--        <link href="<?php echo $_layoutParams['ruta_css']; ?>bootstrap.css" rel="stylesheet" type="text/css">-->
+        <link href="<?php echo $_layoutParams['ruta_css']; ?>bootstrap.min.css" rel="stylesheet" type="text/css">
+        <link href="<?php echo $_layoutParams['ruta_css']; ?>jquery-ui.min.css" rel="stylesheet" type="text/css">
+        <link href="<?php echo $_layoutParams['ruta_css']; ?>jquery-ui.structure.min.css" rel="stylesheet" type="text/css">
+        <link href="<?php echo $_layoutParams['ruta_css']; ?>jquery-ui.theme.min.css" rel="stylesheet" type="text/css">
+        <link href="<?php echo $_layoutParams['ruta_css']; ?>jquery.pnotify.default.css" rel="stylesheet" type="text/css">
+        <link href="<?php echo $_layoutParams['ruta_css']; ?>style.css" rel="stylesheet" type="text/css">
+    </head>
+    <body>
+     
+
+        <div class="ui-pnotify " id="divAlertExito" style="width: 300px; right: 25px; top: 25px; opacity: 1; display: none; cursor: auto;">
+            <div class="alert ui-pnotify-container alert-success ui-pnotify-shadow" style="min-height: 16px;">
+                <h4 class="ui-pnotify-title">Alerta</h4>
+                <div class="ui-pnotify-text"><span id="msjOk" ></span></div>
+            </div>
+        </div>
+
+        <div class="ui-pnotify " id="divAlertWar" style="width: 300px; right: 25px; top: 25px; opacity: 1; display: none; cursor: auto;">
+            <div class="alert ui-pnotify-container alert-danger ui-pnotify-shadow" style="min-height: 16px;">
+                <h4 class="ui-pnotify-title">&iexcl;Atenci&oacute;n!</h4>
+                <div class="ui-pnotify-text" id="mensajeWar"><span id="msjWar"></span></div>
+            </div><!--<img src="<?php echo $_layoutParams['ruta_img']; ?>st_rojo.png" width="16" border="0"  />-->
+        </div>
+
+        <div class="ui-pnotify " id="divAlertInfo" style="width: 300px; right: 25px; top: 25px; opacity: 1; display: none; cursor: auto;">
+            <div class="alert ui-pnotify-container alert-info ui-pnotify-shadow" style="min-height: 16px;">
+                <div class="ui-pnotify-text">
+                    <span class="fa fa-spin"><img src="<?php echo $_layoutParams['ruta_img']; ?>loading.gif" width="32" border="0" /></span> Procesando, espere un momento.</div>
+            </div>
+        </div>
+
+
+
+
+
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div id="modal_dialog" class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="ML_tituloForm"></h4>
+            </div>
+
+            <div class="modal-body" id="ML_divPopup"></div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+        <div class="container">
+            <div class="page-header">
+                <h3>Registro de Usuario</h3>
+            </div>
+            <div class="row">    
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="panel panel-primary">
+                            <div class="panel-heading">
+                                <p>Registro</p>
+                            </div>
+                            <div class="panel-body">
+                                <form class="formRegistro" id="formRegistro" method="post">
+                                    <div class="col-md-8">
+                                        <div class="form-group">
+                                            <label>Usuario</label>
+                                            <input type="text" id="txtLogin" name="txtLogin" class="form-control">    
+                                        </div>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <div class="form-group">
+                                            <label>Contraseña</label>
+                                            <input type="password" id="txtContraseña" name="txtContraseña" class="form-control">   
+                                        </div>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <div class="form-group">
+                                            <label>Confirmar Contraseña</label>
+                                            <input type="password" id="txtContraseñaConf" name="txtContraseñaConf" class="form-control">   
+                                        </div>
+                                    </div>
+                                 
+                                    <div class="col-md-8">
+                                        <div class="form-group">
+                                            <label>E-mail</label>
+                                            <input type="text" id="txtEmail" name="txtEmail" class="form-control">   
+                                        </div>
+                                    </div>
+                                      <div class="col-md-8">
+                                        <div class="form-group">
+                                            <label>Nombre</label>
+                                            <input type="text" id="txt_Nombre" name="txt_Nombre" class="form-control">   
+                                        </div>
+                                    </div>
+                                      <div class="col-md-8">
+                                        <div class="form-group">
+                                            <label>Apellido</label>
+                                            <input type="text" id="txt_Apellido" name="txt_Apellido" class="form-control">   
+                                        </div>
+                                    </div>
+
+
+                                    <div class="col-md-8">      
+                                        <button type="button" id="botonEnviar" class="btn btn-primary"
+                                               onclick="Registro.prototype.procesoEnviaForm('formRegistro', '<?php echo BASE_URL ?>registro/guardarUsuario', 'btnEnviar', '<?php echo BASE_URL ?>login')"
+                                               data-target="#myModal" data-toggle="modal"> Enviar</button>
+                                      
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="panel-footer">
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+   <div class="navbar-bottom navbar-fixed-bottom" style="background-color: #07a; color:#fff">
+           
+                <p class="text-center">Fresno, Derechos reservados</p>  
+               
+            
+        </div>
+    </body>
+    <script type="text/javascript" src="<?php echo $_layoutParams['ruta_js']; ?>jquery-2.1.4.min.js"></script>
+<!--    <script type="text/javascript" src="<?php echo $_layoutParams['ruta_js']; ?>bootstrap.js"></script>-->
+    <script type="text/javascript" src="<?php echo $_layoutParams['ruta_js']; ?>bootstrap.min.js"></script>
+    <script type="text/javascript" src="<?php echo $_layoutParams['ruta_js']; ?>Funciones.js"></script>
+     <script type="text/javascript" src="<?php echo $_layoutParams['ruta_js']; ?>jquery-ui.js"></script>
+    <script type="text/javascript" src="<?php echo $_layoutParams['ruta_public_js']; ?>Registro.js"></script>
+   
+    <!--<script type="text/javascript" src="<?php echo $_layoutParams['ruta_js']; ?>pnotify.custom.min.js"></script>-->
+  
+    
+
+</html>

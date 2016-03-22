@@ -1,0 +1,42 @@
+
+<form class="formAsignaUsProy">
+<div class="row">
+    <div class="col-md-12">
+        <div class="form-group">
+            <label>Seleccione un usuario</label>
+            <select class="form-control" name='sel_usuario'>
+                <option value="">Seleccione un usuario...</option>
+                <?php if($this->usuarios) 
+                {
+                    foreach ($this->usuarios as $us){
+                    ?>    
+                <option value="<?php echo $us->getIduser() ?>"><?php echo $us->getNombre().' '. $us->getApellido() ?></option>
+                    <?php 
+                    }
+                }?>
+            </select>
+        </div>
+        </div>
+        <div class="col-md-12">
+            <div class="form-group">
+                <label>Seleccione un proyecto</label>
+                <select class="form-control" name='sel_proyecto'>
+                <option value="">Seleccione un proyecto</option>
+                <?php if($this->proyectos) 
+                {
+                    foreach ($this->proyectos as $pry){
+                    ?>    
+                <option value="<?php echo $pry->getId_producto() ?>"><?php echo $pry->getNombre() ?></option>
+                    <?php 
+                    }
+                }?>
+            </select>
+            </div>
+        </div> 
+        <div class="col-md-12">
+              <a data-toggle="modal" class="btn btn-success" id="btnInsertModulo" onClick="Modulo.prototype.procesoEnviaForm('formAsignaUsProy', '<?php echo BASE_URL ?>modulo/insertUsuarioProyecto', 'btnInsertModulo','')">
+                    Guardar</a>
+        </div>  
+    
+</div>    
+</form>

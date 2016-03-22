@@ -1,0 +1,441 @@
+<?php
+$contFinalizado1 = 0;
+$cont = 0;
+$cont2 = 0;
+$estado = '';
+$contProceso = 0;
+$contIniciado = 0;
+$contFinalizado = 0;
+?>
+<div class="row">
+    <div class="col-md-6">
+        <div class="col-md-12">
+            <?php
+            if ($this->_usuarioTarea) {
+                foreach ($this->_usuarioTarea as $usTr) {
+
+                    if ($usTr->getFechaInicio() != null) {
+                        $cont2++;
+                        if ($cont2 > 0) { {
+                                $contProceso++;
+                                if ($usTr->getFechafinalizacion() != null) {
+
+                                    $contFinalizado++;
+                                    $contProceso--;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            if ($contProceso == 0 && $contFinalizado == 0) {
+                ?>
+
+                <label class="btn btn-danger">Tarea <?php echo $this->_It_nombre_estado ?></label>
+
+                <?php
+            } else {
+                if ($contProceso == 0) {
+                    if ($contFinalizado == count($this->_usuarioTarea)) {
+                        ?> <label class="btn btn-primary">Tarea Finalizada</label> <?php
+                    } else {
+                        ?> <label class="btn btn-primary">Tarea Iniciada</label> <?php
+                    }
+                } else {
+                    ?> <label class="btn btn-success">Tarea En Proceso</label>  <?php
+                }
+            }
+            ?>     
+        </div>
+
+        <div class="col-md-12">
+            <br>
+            <h4>Datos de la tarea</h4>
+            <div class="form-group">
+                <label>Trabajo Solicitado</label>
+                <input type="text" readonly="true" class="form-control" value="<?php echo $this->_It_tarea ?>">
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="form-group">
+                <label>Descripci&oacute;n del problema</label>
+                <textarea style="resize: none;" type="text" readonly="true" class="form-control"><?php echo $this->_It_descripcion_problema ?></textarea>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="form-group">
+                <label>Soluci&oacute;n Propuesta</label>
+                <textarea style="resize: none;" type="text" readonly="true" class="form-control"><?php echo $this->_It_solucion_propuesta ?></textarea>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <?php
+            if ($this->_usuarioTareaLista) {
+                //echo var_dump($this->_usuarioTarea)
+                ?>
+
+                <h4>Usuarios Asignados</h4>
+                <br>
+                <?php
+                foreach ($this->_usuarioTareaLista as $us) {
+                    ?>
+
+
+                    <div id="usuarios" class="col-md-5">
+                        <!--<div class="form-group">-->
+                        <label class="alert alert-info" ><?php echo $us->getNombre() . ' ' . $us->getApellido() ?></label>
+                        <!--</div>-->
+
+                    </div>
+                    <div class="col-md-7">
+                        <!--<div class="form-group">-->
+                        <?php if ($us->getFechaInicio() != null || $us->getFechaInicio() != '') { ?> <label><b>Inicio de Tarea: <?php echo $us->getFechaInicio() ?></b></label> <?php } ?>
+                        <?php if ($us->getFechaAsignacion() != null || $us->getFechaAsignacion() != '') { ?> <label><b>Asignaci&oacute;n de Tarea: <?php echo $us->getFechaAsignacion() ?></b></label> <?php } ?>
+                        <?php
+                        if ($us->getFechafinalizacion() != null || $us->getFechafinalizacion() != '') {
+                            $contFinalizado1++
+                            ?> <label><b>Finalizaci&oacute;n de Tarea: <?php echo $us->getFechafinalizacion() ?></b></label> <?php } ?>
+                        <!--</div>-->
+
+                    </div> 
+
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+
+                    <?php
+                }
+            }
+            ?>
+        </div>
+        <div class="col-md-12">
+            <div class="form-group">
+                <label>Evento</label>
+                <input type="text" readonly="true" class="form-control" value="<?php echo $this->_It_nombre_evento ?>">
+            </div> 
+        </div>
+        <div class="col-md-12">
+            <div class="form-group">
+                <label>Nivel</label>
+                <input type="text" readonly="true" class="form-control" value="<?php echo $this->_It_nombre_nivel ?>">
+            </div> 
+        </div>
+
+        <div class="col-md-12">
+            <div class="form-group">
+                <label>Fecha y hora de solicitud</label>
+                <input type="text" readonly="true" class="form-control" value="<?php echo date("d-m-Y H:i:s", strtotime($this->_It_Fecha_reporte)) ?>">
+            </div> 
+        </div>
+    </div>
+
+    <div class="col-md-6">
+
+
+        <form class="form_terminarTarea">
+            <?php
+            if (count($this->_usuarioTarea) == $contFinalizado) {
+                ?> 
+                <div class="row">
+                    <div class="col-md-12">
+                        <input type="hidden" name="it_id_tarea_finalizado" value="<?php echo $this->_It_id_tarea ?>">
+                        <input type="hidden" name="it_id_user_finalizado" value="<?php echo $this->_It_id_user_clie ?>">
+                        <button class="btn btn-primary" id="btnTerminar" onclick="Modulo.prototype.procesoEnviaForm('form_terminarTarea', '<?php echo BASE_URL ?>modulo/finalizarProceso', 'btnTerminar', '<?php echo BASE_URL ?>modulo')">Finalizar Tarea</button>
+                    </div>
+
+                </div>
+                <br>
+                <?php
+            }
+            ?>
+        </form>
+        <?php
+        if ($this->_It_id_estado == 1) {
+            ?>
+            <div class="row">
+                <div class="col-md-12">
+                    <button class="btn btn-danger" onclick="rechazo()">Rechazar Tarea</button>
+                </div>
+
+            </div>
+            <br>
+            <?php
+        }
+        ?>
+        <div class="row">
+
+            <?php
+            if ($this->_It_id_estado == 1) {
+                ?>
+
+                <div class="col-md-12">
+                    <button class="btn btn-yellow" onclick="iniciar()">Asignar Tarea</button>
+                </div>
+                <br>
+                <?php
+            }
+            ?>
+
+
+        </div>
+
+
+        <?php
+        if ($this->_It_id_estado > 1 && $this->_It_id_estado < 4 && Session::get('t_user') != 1) {
+            ?>
+
+            <div class="col-md-12">
+
+                <button id="btnAsignarExtra" class="btn btn-yellow" onclick="asignacion()">Asignar recurso extra</button>
+
+            </div>
+            <br>
+            <?php
+        }
+        ?>
+
+
+
+
+        <br>
+        <br>
+
+
+    </div>   
+    <div class="col-md-6" id="asignada" style="display: none">
+
+        <form class="form-asignacion">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label>Asignar a: </label>
+                    <select class="form-control" name="usuarioAsignacion">
+                        <option value="">Seleccione un Cliente Interno</option>
+                        <?php
+                        if ($this->_usuarioInterno) {
+                            foreach ($this->_usuarioInterno as $us) {
+                                ?>
+                                <option value='<?php echo $us->getIduser() ?>'><?php echo $us->getNombre() . ' ' . $us->getApellido(); ?></option>
+                                <?php
+                            }
+                        }
+                        ?>
+                    </select>
+                </div>
+            </div>
+
+            <?php
+//            $d1 = $this->_horas_estimadas;
+//            $d2 = $this->_It_Horas_dias;
+//
+//            $result = $d1 - $d2;
+//
+////            echo $result;
+////            echo $this->_It_Fecha_termino_actividad;
+//
+//            $diferencia = strtotime($this->_It_Fecha_termino_actividad) + (($result + 1) * 3600);
+//            ?>
+
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label>Fecha de Asignaci&oacute;n De Tarea</label>
+                    <!-- Diferencia entre fecha de inicio tarea generica y fecha de inicio tarea usuario anterior -->
+                    <!-- No puede ser menor a esta fecha, validar-->
+
+                    <!--$fechaInicioTarea = $this->_It_Fecha_inicio;--> 
+                    <!--$fechaInicioUsuario =  $this->_usuarioTareaLista[0]->getFechaAsignacion();-->
+
+                    <input type="text" class="form-control" name="fechaAsignacion2" id="fechaAsignacion"/>
+                    <!--<input type="hidden" class="form-control" name="fechaLimite1" id="fechaLimite1" value=""/>-->
+                </div>    
+            </div>
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label>Fecha de T&eacute;rmino de Asignaci&oacute;n</label>
+                    <!-- Fecha de termino de tarea generica -->
+                    <input type="text" class="form-control" name="fechaTermino2" id="fechaTermino" value=""/>
+                    <!--<input type="hidden" class="form-control" name="fechaLimite2" id="fechaLimite2" value="<?php echo gmdate("Y-m-d H:i:s", $diferencia) ?>"/>-->
+                </div>    
+            </div>
+
+            <div class="col-md-12">
+                <div class="form-group">
+                    <!--<label>Horas de Asignaci&oacute;n (Máximo <?php echo $result . ' horas' ?>)</label>-->
+                    <label>Horas de Asignaci&oacute;n </label>
+<!--                    <input type="hidden" id="horasLimite" name="horasLimite" value="<?php echo $result ?>">-->
+                    <!-- Diferencia entre horas estimadas y fecha de asignacion -->
+                    <input type="number" min="1" max="100"  onkeydown="validaNumeros()" class="form-control" name="horaAsignadas" id="horaAsignadas" value="<?php echo $this->_horas_estimadas?>"/>
+                </div>    
+            </div>
+            <div class="col-md-12">
+                <input type="hidden" name="it_id_tarea_asignacion" value="<?php echo $this->_It_id_tarea ?>">
+                <input type="hidden" name="it_id_hito_asignacion" value="<?php echo $this->_It_id_hito ?>">
+                <input type="hidden" name="it_nombre_asignacion" value="<?php echo $this->_It_tarea ?>">
+                <a class='btn btn-yellow' id='btnIniciar' onclick="Modulo.prototype.procesoEnviaForm('form-asignacion', '<?php echo BASE_URL ?>modulo/asignarTareaUsuario', 'btnIniciar', '<?php echo BASE_URL ?>modulo')">Asignar a tarea</a>
+            </div>
+        </form>
+
+    </div>
+    <div class="col-md-6" id="rechazo" style="display: none" >
+        <br>
+        <!--        <button onclick="cerrarRechazo();" class="btn btn-primary">Ocultar</button>-->
+        <form class="formMotivoRechazo">
+            <div class="row">
+                <div class="col-md-12">
+                    <br>
+                    <input type="hidden" name="it_id_tarea_rechazo" value="<?php echo $this->_It_id_tarea ?>">
+                    <label>Motivo de rechazo</label>
+                    <textarea style="height: 300px" class="form-control" name="it_descripcion_tarea_rechazo" placeholder="Escriba un motivo de rechazo"></textarea>
+                </div>
+                <div class="col-md-12">
+                    <br>
+                    <input type="hidden" name="it_id_tarea_rechazado" value="<?php echo $this->_It_id_tarea ?>">
+                    <input type="hidden" name="it_nombre_tarea_rechazado" value="<?php echo $this->_It_tarea ?>">
+                    <a class='btn btn-danger' id='btnRechazo' onclick="Modulo.prototype.procesoEnviaForm('formMotivoRechazo', '<?php echo BASE_URL ?>modulo/rechazarTarea', 'btnRechazo', '<?php echo BASE_URL ?>modulo')">Rechazar Solicitud</a>  
+                </div>
+            </div>
+        </form>
+    </div> 
+
+    <div class="col-md-6"  id="iniciada" style="display: none;" >
+        <!--        <button onclick="cerrarIniciada();" class="btn btn-primary">Ocultar</button>-->
+        <form class="formIniciar">
+            <div class="row">
+                <!--<h4>Datos de la tarea</h4>-->
+                <div class="col-md-12">
+                    <label>Instrucci&oacute;n de la soluci&oacute;n</label>
+                    <textarea style="resize: none;" class="form-control" name="descripcionAdmin" ></textarea>
+                </div>
+                <div class="col-md-12"  >
+
+                    <div class="form-group">
+                        <label>Fecha de Inicio de Tarea</label>
+                        <input type="text" class="form-control" name="fechaIncioInicio" id="fechaIncioInicio"/>
+                    </div>    
+
+                </div>
+                <div class="col-md-12" >
+
+                    <div class="form-group">
+                        <label>Fecha de T&eacute;rmino de Tarea</label>
+                        <input type="text" class="form-control" name="fechaTerminoInicio" id="fechaTerminoInicio"/>
+                    </div>    
+
+                </div>
+            </div>
+            <div class="row">
+                <h4>Datos del cliente interno</h4>
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Asignar Tarea Cliente Interno</label>
+                        <select class="form-control" name="usuarioAsignacion">
+                            <option value="">Seleccione un Cliente Interno</option>
+                            <?php
+                            if ($this->_usuarioInterno) {
+                                foreach ($this->_usuarioInterno as $us) {
+                                    ?>
+                                    <option value='<?php echo $us->getIduser() ?>'><?php echo $us->getNombre() . ' ' . $us->getApellido(); ?></option>
+                                    <?php
+                                }
+                            }
+                            ?>
+                        </select>
+                    </div>
+                </div>
+
+
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Fecha de Asignaci&oacute;n De Tarea</label>
+                        <input type="text" class="form-control" name="fechaAsignacion" id="fechaAsignacion2"/>
+                    </div>    
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Fecha de T&eacute;rmino de Asignaci&oacute;n</label>
+                        <input type="text" class="form-control" name="fechaTermino" id="fechaTermino2"/>
+                    </div>    
+                </div>
+                <?php if($this->_horas_estimadas != "0"){ ?>
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Horas de Asignaci&oacute;n (Máximo <?php echo $this->_horas_estimadas ?> horas)</label>
+                        <input type="number" min="1" max="100"  onkeydown="validaNumeros()" class="form-control" name="horaAsignadas" id="horaAsignadas" value="<?php echo $this->_horas_estimadas ?>"/>
+                    </div>    
+                </div>
+                <?php } ?>
+                <div class="col-md-12">
+                    <input type="hidden" name="it_id_tarea_iniciar" value="<?php echo $this->_It_id_tarea ?>">
+                    <input type="hidden" name="it_id_user" value="<?php echo $this->_It_id_user_clie ?>">
+                    <input type="hidden" name="it_id_hito_iniciar" value="<?php echo $this->_It_id_hito ?>">
+                    <input type="hidden" name="it_nombre_tarea" value="<?php echo $this->_It_tarea ?>">
+                    <input type="hidden" name="it_nombre_evento" value="<?php echo $this->_It_nombre_evento ?>">
+                    <input type="hidden" name="it_nombre_nivel" value="<?php echo $this->_It_nombre_nivel ?>">
+                    <input type="hidden" name="it_fecha_reporte" value="<?php echo $this->_It_Fecha_reporte ?>">
+                    <a class='btn btn-yellow' id='btnIniciar' onclick="Modulo.prototype.procesoEnviaForm('formIniciar', '<?php echo BASE_URL ?>modulo/iniciarTarea', 'btnIniciar', '<?php echo BASE_URL ?>modulo')">Crear Tarea</a>
+                </div>
+            </div>
+
+        </form> 
+    </div>
+
+
+
+
+
+</div>   
+<script>
+    function iniciar() {
+        $("#iniciada").show();
+        $("#rechazo").hide();
+        $("#enproceso").hide();
+        $("#finalizado").hide();
+        $("#asignada").hide();
+    }
+    function rechazo() {
+        $("#iniciada").hide();
+        $("#rechazo").show();
+        $("#enproceso").hide();
+        $("#finalizado").hide();
+        $("#asignada").hide();
+    }
+    function asignacion() {
+        $("#iniciada").hide();
+        $("#rechazo").hide();
+        $("#enproceso").hide();
+        $("#finalizado").hide();
+        $("#asignada").show();
+    }
+
+    function cerrarRechazo() {
+        $("#rechazo").hide();
+
+    }
+    function cerrarIniciada() {
+        $("#iniciada").hide();
+    }
+
+
+
+    $("#fechaAsignacion").datetimepicker();
+    $("#fechaAsignacion2").datetimepicker();
+    $("#fechaTermino2").datetimepicker();
+    $("#fechaInicio").datetimepicker();
+    $("#fechaTermino").datetimepicker();
+    $("#fechaIncioInicio").datetimepicker();
+    $("#fechaTerminoInicio").datetimepicker();
+    $("#fechaAsignacion2").datetimepicker();
+    $("#fechaTermino2").datetimepicker();
+    
+    
+    var conveniancecount = $("div[id*='usuarios']").length;
+    alert(conveniancecount);
+    
+   
+
+    //$( "#fechaAsignacion" ).datepicker({ timeFormat:  "hh:mm:ss"});
+
+</script>
+
+
+

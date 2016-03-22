@@ -1,0 +1,122 @@
+
+<div id="title-breadcrumb-option-demo" class="page-title-breadcrumb">
+    <div class="page-header pull-left">
+        <div class="page-title">
+             <i class="fa fa-users fa-2x" style="font-size: 30px"></i>&nbsp <?php echo $this->_titulo ?></div>
+    </div>
+    <ol class="breadcrumb page-breadcrumb pull-right">
+        <li><i class="fa fa-home"></i>&nbsp;<a href="sistema">Inicio</a>&nbsp;&nbsp;<i class="fa fa-angle-right"></i>&nbsp;&nbsp;</li>
+        <li class="hidden"><a href="#"><?php echo $this->_titulo ?></a>&nbsp;&nbsp;<i class="fa fa-angle-right"></i>&nbsp;&nbsp;</li>
+        <li class="active"><?php echo $this->_titulo ?></li>
+    </ol>
+    <div class="clearfix">
+    </div>
+</div>
+
+<div class="page-content">
+
+    <a data-toggle="modal" href="#myModal" class="btn btn-primary" onclick="Cliente.prototype.abreModal('<?php echo BASE_URL ?>/cliente/nuevo', 'Nuevo Cliente', '')"><span class="fa fa-plus"></span>&nbsp Nuevo</a>
+
+    <br>
+    <br>
+    <div class="panel panel-grey">
+        <div class="panel-heading"><?php echo $this->_tituloPanel ?></div>
+        <div class="panel-body">
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th><strong></strong></th>
+                            <th><strong>ID</strong></th>
+                            <th><strong>Nombre</strong></th>
+                            <th><strong>Nombre Corto</strong></th>
+                        </tr>
+                    </thead>
+                    <?php
+                    if ($this->_clientes) {
+                        foreach ($this->_clientes as $p) {
+                            ?>
+                            <tbody>
+                                <tr>
+                                    <td><a onclick="Cliente.prototype.abreModal('<?php echo BASE_URL ?>cliente/detalleClientes/<?php echo $p->getId() ?>', 'Detalles del Cliente', '')" data-toggle="modal" href="#myModal" class="btn btn-success"><span class="fa fa-search-plus"></span></a></td>
+                                    <td><?php echo $p->getId() ?></td>
+                                    <td><?php echo $p->getNombre() ?></td>
+                                    <td><?php echo $p->getNombreCorto() ?></td>
+                                </tr>
+                            </tbody>
+
+                            <?php
+                        }
+                    }
+                    ?>
+
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="text-center">
+        <ul class="pagination pagination-lg mtm mbm">
+
+
+            <li id="atras" ><a href="#" onclick="irAtras()">&laquo;</a></li>
+            <?php
+            for ($index = 0; $index < $this->_paginas; $index++) {
+
+                if (($index + 1) == $this->_paginaSeleccionada) {
+                    ?>
+                    <li class="active">
+                        <?php
+                    } else {
+                        ?>
+                    <li>
+                    <?php }
+                    ?>
+                    <a class="num" onclick="" 
+                       value="<?php echo BASE_URL ?>cliente?pag=<?php echo $index + 1 ?>" href="<?php echo BASE_URL ?>cliente?pag=<?php echo $index + 1 ?>"><?php echo $index + 1 ?></a>
+                </li>
+                <?php
+            }
+            ?>
+            <li id="adelante"><a onclick="irAdelante()" href="#">&raquo;</a></li>
+
+        </ul>
+    </div>
+</div>
+
+<script>
+
+    function irAdelante() {
+        
+        //obtenemos la pagina actual
+        var num = $('li.active > .num').text();
+
+        var next = parseInt(num) + 1;
+
+        var total = <?php echo $this->_paginas ?>;
+
+        if (next <= total) {
+            window.location.href = "<?php echo BASE_URL ?>cliente?pag=" + next;
+        } else {
+            $('#adelante').addClass('disabled');
+        }
+    }
+
+
+    function irAtras() {
+        //obtenemos la pagina actual
+        var num = $('li.active > .num').text();
+        
+        var back = parseInt(num) - 1;
+
+        if (back >= 1) {
+            window.location.href = "<?php echo BASE_URL ?>cliente?pag=" + back;
+        } else {
+            $('#atras').addClass('disabled');
+        }
+
+    }
+
+</script>
+
+
+

@@ -1,0 +1,88 @@
+
+
+            <!--<a class="btn btn-primary" id="btnAgregar" data-toggle="modal" href="#myModal"  onClick="Sistema.prototype.abreModal('<?php echo BASE_URL ?>sistema/abreOrganizacion', 'Nueva Organización')">Agregar Proyecto</a>-->
+<!--BEGIN CHAT FORM-->
+           
+            <!--END CHAT FORM-->
+            <!--BEGIN PAGE WRAPPER-->
+          
+                <!--BEGIN TITLE & BREADCRUMB PAGE-->
+                <div id="title-breadcrumb-option-demo" class="page-title-breadcrumb">
+                    <div class="page-header pull-left">
+                        <div class="page-title">
+                            Monitor de Tareas</div>
+                    </div>
+                    <ol class="breadcrumb page-breadcrumb pull-right">
+                        <li><i class="fa fa-home"></i>&nbsp;<a href="sistema">Home</a>&nbsp;&nbsp;<i class="fa fa-angle-right"></i>&nbsp;&nbsp;</li>
+                        <li class="hidden"><a href="#">Monitor de Tareas</a>&nbsp;&nbsp;<i class="fa fa-angle-right"></i>&nbsp;&nbsp;</li>
+                        <li class="active">Monitor de Tareas</li>
+                    </ol>
+                    <div class="clearfix">
+                    </div>
+                </div>
+                <!--END TITLE & BREADCRUMB PAGE-->
+                <!--BEGIN CONTENT-->
+                <div class="page-content">
+                    <div id="tab-general">
+                         <h2>Proyectos</h2>
+                        
+                       <?php if($this->_proyectosUsuario)
+                       {
+                           ?>
+                        <div id="sum_box" class="row mbl">
+                           <?php foreach ($this->_proyectosUsuario as $proy){ ?> 
+                            <a  id="btnAgregar" href="<?php echo BASE_URL ?>sistema/redireccionaModelos/<?php echo $proy->getId_producto() ?>">
+                            <div class="col-sm-6 col-md-3">
+                                <div class="panel profit db mbm">
+                                    <div class="panel-body">
+                                        <p class="icon">
+                                            <i class="icon fa fa-dashboard"></i>
+                                        </p>
+                                        <h4 class="value">
+                                            <span data-counter="" data-start="10" data-end="50" data-step="1" data-duration="0">
+                                            </span><span><?php echo $proy->getNombre()?></span></h4>
+                                        <p class="description">
+                                           Progreso</p>
+                                        <div class="progress progress-sm mbn">
+                                            <div role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"
+                                                style="width: 80%;" class="progress-bar progress-bar-success">
+                                                <span class="sr-only">80% Complete (success)</span></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                                
+                           <?php }?>
+                         </a>
+                        </div>
+                         <?php 
+                       }
+                         ?>
+                      
+                       
+                    </div>
+                </div>
+                <!--END CONTENT-->
+                <!--BEGIN FOOTER-->
+                
+                <!--END FOOTER-->
+           
+            <!--END PAGE WRAPPER-->
+            <script>
+                setInterval('someFunc()', 1000);
+
+function someFunc()
+{
+
+ $.ajax({
+            async: true,
+            type: "GET",
+            url: "localhost/GestionTareas/sistema",
+            data: data,
+            success: function (html) {
+                $("#myDiv").html(html);                
+            }  
+        });
+
+}
+            </script>

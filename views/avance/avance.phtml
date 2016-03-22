@@ -1,0 +1,186 @@
+
+
+<div id="title-breadcrumb-option-demo" class="page-title-breadcrumb">
+    <div class="page-header pull-left">
+        <div class="page-title">
+            <i class="fa fa-tasks fa-2x" style="font-size: 30px"></i>&nbsp <?php echo $this->_titulo ?></div>
+    </div>
+    <ol class="breadcrumb page-breadcrumb pull-right">
+        <li><i class="fa fa-home"></i>&nbsp;<a href="sistema">Inicio</a>&nbsp;&nbsp;<i class="fa fa-angle-right"></i>&nbsp;&nbsp;</li>
+        <li class="hidden"><a href="#"><?php echo $this->_titulo ?></a>&nbsp;&nbsp;<i class="fa fa-angle-right"></i>&nbsp;&nbsp;</li>
+        <li class="active"><?php echo $this->_titulo ?></li>
+    </ol>
+    <div class="clearfix">
+    </div>
+</div>
+<style>
+    table#tabla {
+        border-collapse: collapse;   
+    }
+    #tabla tr {
+        background-color: #eee;
+        border-top: 1px solid #fff;
+    }
+    #tabla tr:hover {
+        background-color: #ccc;
+    }
+    #tabla th {
+        background-color: #fff;
+    }
+    #tabla td:hover {
+        cursor: pointer;
+    }
+</style>
+<div class="page-content">
+    <div class="panel panel-grey">
+        <div class="panel-heading"><?php echo $this->_tituloPanel ?> &nbsp <i class="fa fa-check-square-o" style="font-size: 20px"></i></div>
+        <div class="panel-body">
+            <?php if ($this->_avances) { ?>
+
+                <div class="table-responsive">
+                    <table class="table" id="tabla">
+                        <thead>
+                            <tr>
+                                <th><strong>Proyecto</strong></th>
+                                <th><strong>Modulo</strong></th>
+                                <th><strong>Tarea</strong></th>
+                                <!--<th><strong>Problema</strong></th>-->
+                                <th><strong>Estado</strong></th>
+                                <th><strong>Nivel</strong></th>
+                                <th><strong>Evento</strong></th>
+                            </tr>
+                        </thead>
+
+
+                        <?php foreach ($this->_avances as $a) {
+                            ?>
+                            <tbody id="body">
+                                <tr onclick="Cliente.prototype.abreModal('<?php echo BASE_URL ?>avance/detalles/<?php echo $this->_usuario ?>/<?php echo $a->getId_tarea() ?>', 'Detalles del Avance', '')" data-toggle="modal" href="#myModal" >
+                                    <td ><?php echo $a->getNombre_proyecto() ?></td>
+                                    <td><?php echo $a->getNombre_modulo() ?></td>
+                                    <td><?php echo $a->getNombre_tarea() ?></td>
+                                    <!--<td><?php echo $a->getDesc_tarea() ?></td>-->
+                                    <!--<td><?php echo $a->getEstado() ?></td>-->
+                                    <!--<td><?php echo $a->getNivel() ?></td>-->
+
+                                    <td><b><?php echo $a->getEstado() ?></b></td>
+
+                                    <?php if ($a->getNivel() == "Urgente") { ?>
+                                        <td style="background-color: #dc6767; color: white;"><b><?php echo $a->getNivel() ?></b></td>
+                                    <?php } ?>
+                                    <?php if ($a->getNivel() == "Alta") { ?>
+                                        <td style="background-color: #f0ad4e; color: white;"><b><?php echo $a->getNivel() ?></b></td>
+                                    <?php } ?>    
+                                    <?php if ($a->getNivel() == "Normal") { ?>
+                                        <td style="background-color: #5cb85c; color: white;"><b><?php echo $a->getNivel() ?></b></td>
+                                    <?php } ?> 
+
+                                    <?php if ($a->getNombre_evento() == "Falla") { ?>
+                                        <td style="background-color: #dc6767; color: white;"><b><?php echo $a->getNombre_evento() ?></b></td>
+                                    <?php } ?>
+                                    <?php if ($a->getNombre_evento() == "Incidencia") { ?>
+                                        <td style="background-color: #f0ad4e; color: white;"><b><?php echo $a->getNombre_evento() ?></b></td>
+                                    <?php } ?>
+                                    <?php if ($a->getNombre_evento() == "Mejora") { ?>
+                                        <td style="background-color: #5cb85c; color: white;"><b><?php echo $a->getNombre_evento() ?></b></td>
+                                            <?php } ?>
+                                </tr>
+                            </tbody>
+
+                        <?php }
+                        ?>
+
+
+                    </table>
+                </div>
+            <?php } else {
+                ?>
+            <label>Aún no se han aceptado solicitudes</label>
+            <?php } ?>
+        </div>
+    </div>
+    <div class="panel panel-grey">
+        <div class="panel-heading">Solicitudes en espera &nbsp <i class="fa fa-clock-o" style="font-size: 20px"></i></div>
+        <div class="panel-body">
+
+            <div class="table-responsive">
+                <table class="table" id="tabla">
+                    <thead>
+                        <tr>
+                            <th><strong>Proyecto</strong></th>
+                            <th><strong>Modulo</strong></th>
+                            <th><strong>Tarea</strong></th>
+                            <!--<th><strong>Problema</strong></th>-->
+                            <th><strong>Estado</strong></th>
+                            <th><strong>Nivel</strong></th>
+                            <th><strong>Evento</strong></th>
+                        </tr>
+                    </thead>
+                    <?php
+                    if ($this->_avances2) {
+
+                        foreach ($this->_avances2 as $a2) {
+                            ?>
+                            <tbody id="body">
+
+                                <tr onclick="Cliente.prototype.abreModal('<?php echo BASE_URL ?>avance/detalles/<?php echo $this->_usuario ?>/<?php echo $a2->getId_tarea() ?>/true', 'Detalles', '')" data-toggle="modal" href="#myModal" >
+                                    <td><?php echo $a2->getNombre_proyecto() ?></td>
+                                    <td><?php echo $a2->getNombre_modulo() ?></td>
+                                    <td><?php echo $a2->getNombre_tarea() ?></td>
+                                    <!--<td><?php echo $a2->getDesc_tarea() ?></td>-->
+                                    <!--<td><?php echo $a2->getEstado() ?></td>-->
+                                    <!--<td><?php echo $a2->getNivel() ?></td>-->
+                                    <?php if ($a2->getEstado() == "No Asignada") { ?>
+                                        <td><b><?php echo $a2->getEstado() ?></b></td>
+                                    <?php } ?>
+                                    <?php if ($a2->getEstado() == "Iniciada") { ?>
+                                        <td style="background-color: #1f68b1; color: white;"><b><?php echo $a2->getEstado() ?></b></td>
+                                    <?php } ?>
+                                    <?php if ($a2->getEstado() == "En Proceso") { ?>
+                                        <td style="background-color: #f0ad4e; color: white;"><b><?php echo $a2->getEstado() ?></b></td>
+                                    <?php } ?>    
+                                    <?php if ($a2->getEstado() == "Finalizada") { ?>
+                                        <td style="background-color: #5cb85c; color: white;"><b><?php echo $a2->getEstado() ?></b></td>
+                                    <?php } ?>   
+
+                                    <?php if ($a2->getNivel() == "Urgente") { ?>
+                                        <td style="background-color: #dc6767; color: white;"><b><?php echo $a2->getNivel() ?></b></td>
+                                    <?php } ?>
+                                    <?php if ($a2->getNivel() == "Alta") { ?>
+                                        <td style="background-color: #f0ad4e; color: white;"><b><?php echo $a2->getNivel() ?></b></td>
+                                    <?php } ?>    
+                                    <?php if ($a2->getNivel() == "Normal") { ?>
+                                        <td style="background-color: #5cb85c; color: white;"><b><?php echo $a2->getNivel() ?></b></td>
+                                    <?php } ?> 
+                                    <?php if ($a2->getNombre_evento() == "Falla") { ?>
+                                        <td style="background-color: #dc6767; color: white;"><b><?php echo $a2->getNombre_evento() ?></b></td>
+                                    <?php } ?>
+                                    <?php if ($a2->getNombre_evento() == "Incidencia") { ?>
+                                        <td style="background-color: #f0ad4e; color: white;"><b><?php echo $a2->getNombre_evento() ?></b></td>
+                                    <?php } ?>
+                                    <?php if ($a2->getNombre_evento() == "Mejora") { ?>
+                                        <td style="background-color: #5cb85c; color: white;"><b><?php echo $a2->getNombre_evento() ?></b></td>
+                                            <?php } ?>
+                                </tr>
+                            </tbody>
+
+                            <?php
+                        }
+                    }
+                    ?>
+
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="<?php echo $_layoutParams['ruta_js']; ?>jquery-2.1.4.min.js"></script>
+<script src="<?php echo $_layoutParams["ruta_template"] ?>script/jquery-ui.js"></script>
+
+<script>
+
+
+</script>
+
+
+

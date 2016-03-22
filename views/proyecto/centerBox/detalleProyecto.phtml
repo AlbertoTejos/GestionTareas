@@ -1,0 +1,94 @@
+<form class="formModulo">  
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-group">
+                <label>ID</label>
+                <input type="text" readonly="true" class="form-control" name="txtId" value="<?php echo $this->_id ?>">
+            </div>  
+        </div>
+        <div class="col-md-12">
+            <div class="form-group">
+                <label>Nombre</label>
+                <input type="text" class="form-control" name="txtNombre" value="<?php echo $this->_nombre ?>">
+            </div>  
+        </div>
+        <div class="col-md-12">
+            <div class="form-group">
+                <label>Nemo</label>
+                <input type="text" class="form-control"  name="txtNemo" value="<?php echo $this->_nemo ?>">
+            </div>  
+        </div>
+        <div class="col-md-12">
+            <div class="form-group">
+                <label>Cliente</label>
+                <input type="text" readonly="true" class="form-control" name="txtCliente" value="<?php echo $this->_nombreCliente ?>">
+            </div>  
+        </div>
+
+        <div class="col-lg-12">
+            <div class="form-group text-right">
+                <a href="#" onclick="abreDetalle()" class="btn btn-primary">&nbsp;  &nbsp; Ver Detalle   &nbsp;  &nbsp;</a>
+                <a class="btn btn-success" id="btnModifica" onclick="Proyecto.prototype.procesoEnviaForm('formModulo', '<?php echo BASE_URL ?>proyecto/modificar', 'btnModifica', '<?php echo BASE_URL ?>proyecto')">Modificar</a>
+                <a class="btn btn-danger" id="btnElimina" onclick="confirmarEliminacion();">Eliminar</a>
+            </div>
+
+
+
+        </div>
+        <br>
+    </div>
+    <div class="row" id="detalleTareas" style="display: none">
+        <div class="col-md-12">
+            <div class="table-responsive" style="overflow:auto; height: 200px;">
+                <h3 class="title">Trabajos</h3>
+                <a class="btn btn-primary" onclick="ocultar()" id="ocultar">Ocultar</a>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Tipificación</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                        if ($this->_hitos) {
+                            foreach ($this->_hitos as $h) {
+                                ?>
+                                <tr >
+                                    <td><?php echo $h->getIdHito() ?></td>
+                                    <td><?php echo $h->getNombre() ?></td>
+                                </tr>
+                                <?php
+                            }
+                        }
+                        ?>
+                    </tbody>
+
+                </table> 
+            </div>
+        </div>
+
+    </div>
+</form>
+<script>
+    function abreDetalle() {
+
+        $("#detalleTareas").show();
+
+    }
+    function ocultar() {
+
+        $("#detalleTareas").hide();
+
+    }
+    
+    function confirmarEliminacion() {
+        var x = confirm("Está seguro de querer eliminar este proyecto?");
+        
+        if (x){
+            Proyecto.prototype.procesoEnviaForm('formModulo', '<?php echo BASE_URL ?>proyecto/eliminar', 'btnElimina', '<?php echo BASE_URL ?>proyecto');
+        }
+        
+    }
+</script>

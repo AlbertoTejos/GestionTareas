@@ -1,0 +1,93 @@
+<form class="formModulo">  
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-group">
+                <label>ID</label>
+                <input type="text" readonly="true" class="form-control" name="txtId" value="<?php echo $this->_id ?>">
+            </div>  
+        </div>
+        <div class="col-md-12">
+            <div class="form-group">
+                <label>Nombre</label>
+                <input type="text" class="form-control" name="txtNombre" value="<?php echo $this->_nombre ?>">
+            </div>  
+        </div>
+        <div class="col-md-12">
+            <div class="form-group">
+                <label>Nombre Corto</label>
+                <input type="text" class="form-control"  name="txtNombreCorto" value="<?php echo $this->_nombreCorto ?>">
+            </div>  
+        </div>
+        <br>
+    </div>
+    <div class="col-lg-12">
+        <div class="form-group text-right">
+            <a href="#" onclick="abreDetalle()" class="btn btn-primary">&nbsp;  &nbsp; Ver Detalle   &nbsp;  &nbsp;</a>
+            <a class="btn btn-success" id="btnModifica" onclick="Cliente.prototype.procesoEnviaForm('formModulo', '<?php echo BASE_URL ?>cliente/modificar', 'btnModifica', '<?php echo BASE_URL ?>cliente')">Modificar</a>
+            <!--<button class="btn btn-danger" disabled="true" id="btnElimina" onclick="Cliente.prototype.procesoEnviaForm('formModulo', '<?php echo BASE_URL ?>cliente/eliminar', 'btnElimina', '<?php echo BASE_URL ?>cliente')">Eliminar</button>-->
+            <!--<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#modalConfirmacion">Eliminar</button>-->
+            <a class="btn btn-danger" id="btnElimina" onclick="confirmarEliminacion();">Eliminar</a>
+        </div>
+    </div>
+    <br>
+    <div class="row" id="detalleTareas" style="display: none">
+        <div class="col-md-12">
+            <div class="table-responsive" style="overflow:auto; height: 200px;">
+                <h3 class="title">Proyectos</h3>
+                <a class="btn btn-primary" onclick="ocultar()" id="ocultar">Ocultar</a>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nombre</th>
+                            <th>Nemo</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                        if ($this->_proyectos) {
+                            foreach ($this->_proyectos as $p) {
+                                ?>
+                                <tr >
+                                    <td><?php echo $p->getId_producto() ?></td>
+                                    <td><?php echo $p->getNombre() ?></td>
+                                    <td><?php echo $p->getNemo() ?></td>
+                                </tr>
+                                <?php
+                            }
+                        }
+                        ?>
+                    </tbody>
+
+                </table> 
+            </div>
+        </div>
+
+    </div>
+</form>
+<script>
+    function abreDetalle() {
+
+        $("#detalleTareas").show();
+
+    }
+    function ocultar() {
+
+        $("#detalleTareas").hide();
+
+    }
+
+    function confirmarEliminacion() {
+        var x = confirm("Está seguro de querer eliminar este cliente?");
+        
+        if (x){
+            Cliente.prototype.procesoEnviaForm('formModulo', '<?php echo BASE_URL ?>cliente/eliminar', 'btnElimina', '<?php echo BASE_URL ?>cliente');
+        }
+        
+    }
+
+</script>
+
+
+

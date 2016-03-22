@@ -1,0 +1,118 @@
+<form class="formModulo">  
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-group">
+                <label>ID Trabajo</label>
+                <input type="text" readonly="true" class="form-control" name="Mm_id_hito" value="<?php echo $this->_MmId ?>">
+            </div>  
+        </div>
+        <div class="col-md-12">
+            <div class="form-group">
+                <label>Nombre del Trabajo</label>
+                <input type="text" class="form-control" name="Mm_nombre_hito" value="<?php echo $this->_MmNombre ?>">
+            </div>  
+        </div>
+        <div class="col-md-12">
+            <div class="form-group">
+                <label>ID Proyecto</label>
+                <input type="text" disabled="true" class="form-control"  name="Mm_id_proyecto" value="<?php echo $this->_MmIdProyecto ?>">
+            </div>  
+        </div>
+        <div class="col-md-12">
+            <div class="form-group">
+                <label>Nombre del Proyecto</label>
+                <input type="text" disabled="true" class="form-control" name="Mm_nombre_proyecto" value="<?php echo $this->_MmNombreProyecto ?>">
+            </div>  
+        </div>
+<!--        <div class="col-md-12">
+            <div class="form-group">
+                <label>Vigencia</label>
+                <select class="form-control" name="Mm_vigencia">
+                    <option value="V" <?php
+                    if ($this->_MmEstado == "V") {
+                        echo "selected";
+                    }
+                    ?> >Vigente</option>
+                    <option value="C" <?php
+                    if ($this->_MmEstado == "C") {
+                        echo "selected";
+                    }
+                    ?>>Caducado</option>
+                </select>
+            </div>  
+        </div>-->
+<!--        <div class="col-lg-3">
+            <a href="#" onclick="abreDetalle()" class="btn btn-primary">&nbsp;  &nbsp; Ver Detalle de Tareas    &nbsp;  &nbsp;</a>
+        </div>-->
+        <br>
+<!--        <div class="col-lg-3">
+            <a class="btn btn-success" id="btnModifica" onclick="Modulo.prototype.procesoEnviaForm('formModulo', '<?php echo BASE_URL ?>modulo/modificaHito', 'btnModifica', '<?php echo BASE_URL ?>modulo/abreAdmModulo')">Modificar Nombre de Trabajo</a>
+        </div>-->
+<div class="col-lg-12">
+            <div class="form-group text-right">
+                <!--<a href="#" onclick="abreDetalle()" class="btn btn-primary">&nbsp;  &nbsp; Ver Detalle   &nbsp;  &nbsp;</a>-->
+                <a class="btn btn-success" id="btnModifica" onclick="Modulo.prototype.procesoEnviaForm('formModulo', '<?php echo BASE_URL ?>modulo/modificaHito', 'btnModifica', '<?php echo BASE_URL ?>modulo/abreAdmModulo')">Modificar</a>
+                <a class="btn btn-danger" id="btnElimina" onclick="confirmarEliminacion();">Eliminar</a>
+            </div>
+
+
+
+        </div>
+        <br>
+
+        <br>
+    </div>
+    <div class="row" id="detalleTareas" style="display: none">
+        <div class="col-md-12">
+            <div class="table-responsive" style="overflow:auto; height: 200px;">
+                <h3 class="title">Detalle de Tareas</h3>
+                <a class="btn btn-primary" onclick="ocultar()" id="ocultar">Ocultar</a>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>#Tarea</th>
+                            <th>Descripci&oacute;n</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+<?php
+if ($this->_tarea) {
+    foreach ($this->_tarea as $tarea) {
+        ?>
+                                <tr >
+                                    <td><?php echo $tarea->getIdTarea() ?></td><td><?php echo $tarea->getNombre() ?></td>
+                                </tr>
+        <?php
+    }
+}
+?>
+                    </tbody>
+
+                </table> 
+            </div>
+        </div>
+
+    </div>
+</form>
+<script>
+    function abreDetalle() {
+
+        $("#detalleTareas").show();
+
+    }
+    function ocultar() {
+
+        $("#detalleTareas").hide();
+
+    }
+    
+     function confirmarEliminacion() {
+        var x = confirm("Está seguro de querer eliminar este trabajo?");
+        
+        if (x){
+            Modulo.prototype.procesoEnviaForm('formModulo', '<?php echo BASE_URL ?>modulo/eliminarTrabajo', 'btnElimina', '<?php echo BASE_URL ?>modulo/abreAdmModulo');
+        }
+        
+    }
+</script>

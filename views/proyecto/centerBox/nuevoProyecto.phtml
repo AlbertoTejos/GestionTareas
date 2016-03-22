@@ -1,0 +1,42 @@
+<div class="row">
+    <form class="form" method="post">
+        <div class="col-md-12">
+            <div class="form-group">
+                <label class="control-label">Nombre</label>
+                <input name="txtNombre"  type="text" class="form-control">
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="form-group">
+                <label class="control-label">Nemo</label>
+                <input type="text" name="txtNemo" class="form-control">
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="form-group">
+                <label class="control-label">Cliente</label>
+                <select class="form-control" name="selectClientes">
+                    <?php
+                    if ($this->_clientes) {
+
+                        foreach ($this->_clientes as $c) {
+                            ?>
+                            <option value="<?php echo $c->getId() ?>"><?php echo $c->getNombre() ?></option>
+                            <?php
+                        }
+                    }
+                    ?>
+                </select>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="form-group text-right">
+                    <button type="submit" id="btn" class="btn btn-yellow" onclick="Proyecto.prototype.procesoEnviaForm('form', '<?php echo BASE_URL ?>proyecto/ingresar', 'btn', '<?php echo BASE_URL ?>proyecto')">Guardar</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+
+
