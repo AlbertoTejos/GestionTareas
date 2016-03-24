@@ -104,9 +104,19 @@ class eventoDAO extends Model{
             echo "OK";
         }else{
             echo "Error en la consulta";
-        }
+        }   
+    }
+    
+    function insertar($trabajo, $evento) {
         
+        $sql = "insert into evento (nombre, trabajo_idTrabajo) 
+                values ('$evento', '$trabajo')";
         
+        if ($this->_db->consulta($sql)) {
+            echo "OK";
+        }else{
+            echo "Error en la consulta";
+        }  
     }
     
 }

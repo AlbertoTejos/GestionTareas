@@ -114,17 +114,19 @@ class moduloDAO extends Model {
         }
     }
 
-    public function getModuloAdm($id) {
+    public function getModuloAdm($id, $idProducto) {
         $sql = "select t.tipificacion, t.idTrabajo, t.Producto_idProducto, p.nombre FROM trabajo t"
                 . " inner join producto p"
-                . " on t.Producto_idProducto = p.idProducto";
+                . " on t.producto_idProducto = p.idProducto";
         if ($id != 0) {
 
             $sql .= " where t.idTrabajo = " . $id . "";
         }
         
-        
-        //echo $sql;
+        if ($idProducto != 0) {
+
+            $sql .= " where t.producto_idProducto = " . $idProducto . "";
+        }
         
         $datos = $this->_db->consulta($sql);
         if ($this->_db->numRows($datos) > 0) {

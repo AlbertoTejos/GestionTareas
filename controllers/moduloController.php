@@ -104,7 +104,7 @@ class moduloController extends Controller {
         //$LIMITE = 5;
 
         $adm_modulo = $this->_proyecto->getProductosUsuarios();
-        $modulos = $this->_modulo->getModuloAdm(0);
+        $modulos = $this->_modulo->getModuloAdm(0, 0);
         $this->_view->_getModulo = $adm_modulo;
 
         if (empty($pag)) {
@@ -213,7 +213,7 @@ class moduloController extends Controller {
     }
 
     public function abreModificaModulo($id) {
-        $modulos = $this->_modulo->getModuloAdm($id);
+        $modulos = $this->_modulo->getModuloAdm($id, 0);
         $id_hito = 0;
         if ($modulos) {
             $this->_view->_MmId = $modulos[0]->getIdHito();

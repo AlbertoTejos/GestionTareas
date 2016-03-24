@@ -112,9 +112,9 @@ class eventoController extends Controller {
         
     }
     
-    function nuevo($idTrabajo = null) {
+    function nuevo($idProducto = null) {
         
-        if ($idTrabajo == null) {
+        if ($idProducto == null) {
             //cargamos los proyectos
             $proyectos = $this->_proyecto->getTodosProyectos();
             $this->_view->_proyectos = $proyectos;
@@ -122,16 +122,31 @@ class eventoController extends Controller {
             //cargamos los proyectos
             $proyectos = $this->_proyecto->getTodosProyectos();
             //traemos el trabajo asociado
-            $trabajo = $this->_trabajo->getModuloAdm($idTrabajo);
+            $trabajo = $this->_trabajo->getModuloAdm(0, $idProducto);
+            
             //enviamos el id del trabajo realizado para dejarlo seleccionado
-            $this->_view->_seleccionado = $idTrabajo;
+            $this->_view->_seleccionado = $idProducto;
             
              //enviamos los datos para cargar las listas desplegables
             $this->_view->_proyectos = $proyectos;          
-            $this->_view->_trabajo = $trabajo[0];
+            $this->_view->_trabajo = $trabajo;
         }
     
         $this->_view->renderizaCenterBox('nuevoEvento');
+    }
+    
+    function ingresar() {
+        
+        $proyecto = $this->getTexto('selectProyecto');
+        echo $proyecto;
+        $trabajo = $this->getTexto('selectTrabajo');
+        echo $trabajo;
+        $evento = $this->getTexto('txtTipificacion');
+        echo $evento;
+        
+        if (isset($proyecto) && isset($trabajo) && isset($evento)) {
+            $this->_modelo->insertar($trabajo, $evento);
+        }            
     }
 
 }
