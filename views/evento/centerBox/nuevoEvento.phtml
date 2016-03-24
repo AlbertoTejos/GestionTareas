@@ -39,7 +39,6 @@
                 <select class="form-control" name="selectClientes">
                     <?php
                     if ($this->_clientes) {
-
                         foreach ($this->_clientes as $c) {
                             ?>
                             <option value="<?php echo $c->getId() ?>"><?php echo $c->getNombre() ?></option>
@@ -65,10 +64,6 @@
         var id = s[s.selectedIndex].value; 
         
         Evento.prototype.abreModal('<?php echo BASE_URL ?>/evento/nuevo/'+id, 'Nuevo Evento', '');
-
     }
     
     </script>
-
-
-
