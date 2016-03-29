@@ -19,7 +19,7 @@
         <div class="col-md-12">
             <div class="form-group">
                 <label class="control-label">Trabajo</label>
-                <select class="form-control"  name="selectTrabajo" onchange="cargarEventos(this)">
+                <select class="form-control"  name="selectTrabajo" id="selectTrabajo" onchange="cargarEventos(this)">
                     <option value="">Seleccione un Trabajo...</option>
                     <?php if ($this->_trabajo) {
                         
@@ -36,11 +36,28 @@
         <div class="col-md-12">
             <div class="form-group">
                 <label class="control-label">Evento</label>
-                <select class="form-control" name="selectEvento">
+                <select class="form-control" name="selectEvento" onchange="cargarAreas(this)">
                     <option value="">Seleccione un Evento...</option>
                     <?php if ($this->_evento) {
-                        foreach ($this->_evento as $e) { ?>                                              
+                        foreach ($this->_evento as $e) { 
+                            if($e->getIdEvento() == $this->_eventoSeleccionado){ ?>
+                                 <option selected value="<?php echo $e->getIdEvento() ?>"><?php echo $e->getNombreEvento() ?></option>
+                            <?php }else { ?>                                              
                             <option value="<?php echo $e->getIdEvento() ?>"><?php echo $e->getNombreEvento() ?></option>                                        
+                    <?php  } 
+                        }
+                    } ?>
+                </select>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="form-group">
+                <label class="control-label">Área</label>
+                <select class="form-control" name="selectArea">
+                    <option value="">Seleccione un Área...</option>
+                    <?php if ($this->_areas) {
+                        foreach ($this->_areas as $a) { ?>                                              
+                            <option value="<?php echo $a->getIdArea() ?>"><?php echo $a->getNombre() ?></option>                                        
                     <?php  } 
                     } ?>
                 </select>
@@ -48,29 +65,20 @@
         </div>
         <div class="col-md-12">
             <div class="form-group">
-                <label class="control-label">Área de Servicio</label>
-                <input type="text" name="txtArea" class="form-control">
+                <label class="control-label">Nombre del Servicio</label>
+                <input type="text" name="txtNombreServicio" class="form-control">
             </div>
         </div>
-<!--        <div class="col-md-12">
+         <div class="col-md-12">
             <div class="form-group">
-                <label class="control-label">Cliente</label>
-                <select class="form-control" name="selectClientes">
-                    <?php
-                    if ($this->_clientes) {
-                        foreach ($this->_clientes as $c) {
-                            ?>
-                            <option value="<?php echo $c->getId() ?>"><?php echo $c->getNombre() ?></option>
-                            <?php
-                        }
-                    }
-                    ?>
-                </select>
+                <label class="control-label">Descripción del Servicio</label>
+                <input type="text" name="txtDescripcionServicio" class="form-control">
             </div>
-        </div>-->
+        </div>
+
         <div class="col-md-12">
             <div class="form-group text-right">
-                    <button type="submit" id="btn" class="btn btn-yellow" onclick="Area.prototype.procesoEnviaForm('form', '<?php echo BASE_URL ?>area/ingresar', 'btn', '<?php echo BASE_URL ?>area')">Guardar</button>
+                    <button type="submit" id="btn" class="btn btn-yellow" onclick="Servicio.prototype.procesoEnviaForm('form', '<?php echo BASE_URL ?>servicio/ingresar', 'btn', '<?php echo BASE_URL ?>servicio')">Guardar</button>
             </div>
         </div>
     </form>
@@ -80,17 +88,29 @@
     
     function cargarTrabajos(s){
       
-        var id = s[s.selectedIndex].value; 
+        var idProyecto = s[s.selectedIndex].value; 
         
-        Area.prototype.abreModal('<?php echo BASE_URL ?>/area/nuevo/'+id, 'Nueva Área', '');
+        Servicio.prototype.abreModal('<?php echo BASE_URL ?>/servicio/nuevo/'+idProyecto, 'Nuevo Servicio', '');
     }
     
     function cargarEventos(s){
         
         var idProyecto = $( "#selectProyecto" ).val();
-        var id = s[s.selectedIndex].value; 
+        var idTrabajo = s[s.selectedIndex].value; 
         
-        Area.prototype.abreModal('<?php echo BASE_URL ?>/area/nuevo/'+ idProyecto + '/' + id, 'Nueva Área', '');
+        Servicio.prototype.abreModal('<?php echo BASE_URL ?>/servicio/nuevo/'+ idProyecto + '/' + idTrabajo, 'Nuevo Servicio', '');
+    }
+    
+    function cargarAreas(s){
+        
+        var idProyecto = $( "#selectProyecto" ).val();
+        alert(idProyecto);
+        var idTrabajo = $( "#selectTrabajo" ).val();
+        alert(idTrabajo);
+        var idEvento = s[s.selectedIndex].value; 
+        alert(idEvento);
+        
+        Servicio.prototype.abreModal('<?php echo BASE_URL ?>/servicio/nuevo/'+ idProyecto + '/' + idTrabajo + '/' + idEvento, 'Nuevo Servicio', '');
     }
     
     </script>

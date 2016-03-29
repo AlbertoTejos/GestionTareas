@@ -16,7 +16,7 @@ class eventoDAO extends Model{
     /*
      * Método encargada de traer todos los eventos para su administración
      */
-    function getEventos($idEvento, $idTrabajo) {
+    function getEventos($idEvento = null, $idTrabajo = null) {
         $sql = "select e.idEvento, e.nombre, e.Trabajo_idTrabajo, t.tipificacion, p.nombre as 'proyecto' from evento e" 
                 . " inner join Trabajo t on t.idTrabajo = e.Trabajo_idTrabajo"
                 . " inner join producto p on p.idProducto = t.producto_idProducto ";

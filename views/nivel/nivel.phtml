@@ -15,7 +15,7 @@
 
 <div class="page-content">
 
-    <a data-toggle="modal" href="#myModal" class="btn btn-primary" onclick="Area.prototype.abreModal('<?php echo BASE_URL ?>/area/nuevo', 'Nueva Área', '')"><span class="fa fa-plus"></span>&nbsp Nueva</a>
+    <a data-toggle="modal" href="#myModal" class="btn btn-primary" onclick="Nivel.prototype.abreModal('<?php echo BASE_URL ?>/nivel/nuevo', 'Nuevo Nivel', '')"><span class="fa fa-plus"></span>&nbsp Nueva</a>
 
     <br>
     <br>
@@ -29,19 +29,19 @@
                             <th><strong></strong></th>
                             <th><strong>ID</strong></th>
                             <th><strong>Nombre</strong></th>
-                            <th><strong>Evento</strong></th>
+                            <th><strong>Proyecto</strong></th>
                         </tr>
                     </thead>
                     <?php
-                    if ($this->_areas) {
-                        foreach ($this->_areas as $a) {
+                    if ($this->_niveles) {
+                        foreach ($this->_niveles as $n) {
                             ?>
                             <tbody>
                                 <tr>
-                                    <td><a onclick="Area.prototype.abreModal('<?php echo BASE_URL ?>area/detalleArea/<?php echo $a->getIdArea() ?>', 'Detalles del Área', '')" data-toggle="modal" href="#myModal" class="btn btn-success"><span class="fa fa-search-plus"></span></a></td>
-                                    <td><?php echo $a->getIdArea() ?></td>
-                                    <td><?php echo $a->getNombre() ?></td>
-                                    <td><?php echo $a->getNombreEvento() ?></td>
+                                    <td><a onclick="Nivel.prototype.abreModal('<?php echo BASE_URL ?>nivel/detalleNivel/<?php echo $n->getIdNivel() ?>', 'Detalles del Nivel', '')" data-toggle="modal" href="#myModal" class="btn btn-success"><span class="fa fa-search-plus"></span></a></td>
+                                    <td><?php echo $n->getIdNivel() ?></td>
+                                    <td><?php echo $n->getNombreNivel() ?></td>
+                                    <td><?php echo $n->getNombreProyecto() ?></td>
                                 </tr>
                             </tbody>
 
@@ -72,7 +72,7 @@
                     <?php }
                     ?>
                     <a class="num" onclick="" 
-                       value="<?php echo BASE_URL ?>area?pag=<?php echo $index + 1 ?>" href="<?php echo BASE_URL ?>area?pag=<?php echo $index + 1 ?>"><?php echo $index + 1 ?></a>
+                       value="<?php echo BASE_URL ?>nivel?pag=<?php echo $index + 1 ?>" href="<?php echo BASE_URL ?>nivel?pag=<?php echo $index + 1 ?>"><?php echo $index + 1 ?></a>
                 </li>
                 <?php
             }
@@ -95,7 +95,7 @@
         var total = <?php echo $this->_paginas ?>;
 
         if (next <= total) {
-            window.location.href = "<?php echo BASE_URL ?>area?pag=" + next;
+            window.location.href = "<?php echo BASE_URL ?>nivel?pag=" + next;
         } else {
             $('#adelante').addClass('disabled');
         }
@@ -109,7 +109,7 @@
         var back = parseInt(num) - 1;
 
         if (back >= 1) {
-            window.location.href = "<?php echo BASE_URL ?>area?pag=" + back;
+            window.location.href = "<?php echo BASE_URL ?>nivel?pag=" + back;
         } else {
             $('#atras').addClass('disabled');
         }

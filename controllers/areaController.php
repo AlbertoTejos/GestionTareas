@@ -81,7 +81,7 @@ class areaController extends Controller{
         $this->_view->renderizarSistema('area');
     }
     
-    
+    //modificar
     function nuevo($idProyecto = null, $idTrabajo = null) {
         
 //        echo $idProyecto;
@@ -131,6 +131,48 @@ class areaController extends Controller{
     }
     
     function ingresar(){
+        
+        $proyecto = $this->getTexto('selectProyecto');
+        $trabajo = $this->getTexto('selectTrabajo');
+        $evento = $this->getTexto('selectEvento');
+        $area = $this->getTexto('txtArea');
+        
+        if (isset($proyecto) && isset($trabajo) && isset($evento) && isset($area)) {
+            $this->_modelo->insertar($evento, $area);
+        }else{
+            echo "Debe completar los campos requeridos";
+        }
+    }
+    
+    function detalleArea($id){
+        
+        $areas = $this->_modelo->getAreas($id);
+               
+        $this->_view->_idArea = $areas[0]->getIdArea();
+        $this->_view->_nombre = $areas[0]->getNombre();
+        $this->_view->_idEvento = $areas[0]->getIdEvento();
+        $this->_view->_nombreEvento = $areas[0]->getNombreEvento();
+        
+        $this->_view->renderizaCenterBox('detallesArea');
+    }
+    
+    function modificar() {
+        
+        $id = $this->getTexto('txtId');
+        $nombre = $this->getTexto('txtNombre');
+        
+        if ($this->_modelo->modificar($id, $nombre)) {
+            echo "OK";
+        }
+        
+    }
+    
+    function eliminar() {
+        
+        $id = $this->getTexto('txtId');
+        if ($this->_modelo->eliminar($id)) {
+            echo "OK";
+        }
         
     }
 

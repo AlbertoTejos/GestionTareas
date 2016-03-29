@@ -1,0 +1,72 @@
+<form class="formModulo">  
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-group">
+                <label>ID</label>
+                <input type="text" readonly="true" class="form-control" name="txtId" value="<?php echo $this->_idNivel ?>">
+            </div>  
+        </div>
+        <div class="col-md-12">
+            <div class="form-group">
+                <label>Nombre</label>
+                <input type="text" class="form-control" name="txtNombre" value="<?php echo $this->_nombre ?>">
+            </div>  
+        </div>
+        <div class="col-md-12">
+            <div class="form-group">
+                <label>Tiempo máximo</label>
+                <!-- ACÁ TYPE TIME  -->
+                <input type="text"  class="form-control"  name="txtNombreCorto" value="<?php echo $this->_tiempoMaximo ?>">
+            </div>  
+        </div>
+        <div class="col-md-12">
+            <div class="form-group">
+                <label>ID Proyecto</label>
+                <input type="text" disabled="true" class="form-control"  name="txtNombreCorto" value="<?php echo $this->_idProyecto ?>">
+            </div>  
+        </div>
+        <div class="col-md-12">
+            <div class="form-group">
+                <label>Proyecto</label>
+                <input type="text" disabled="true" class="form-control"  name="txtNombreCorto" value="<?php echo $this->_nombreProyecto ?>">
+            </div>  
+        </div>
+        <br>
+    </div>
+    <div class="col-lg-12">
+        <div class="form-group text-right">
+            <!--<a href="#" onclick="abreDetalle()" class="btn btn-primary">&nbsp;  &nbsp; Ver Detalle   &nbsp;  &nbsp;</a>-->
+            <a class="btn btn-success" id="btnModifica" onclick="Nivel.prototype.procesoEnviaForm('formModulo', '<?php echo BASE_URL ?>nivel/modificar', 'btnModifica', '<?php echo BASE_URL ?>nivel')">Modificar</a>
+            <!--<button class="btn btn-danger" disabled="true" id="btnElimina" onclick="Cliente.prototype.procesoEnviaForm('formModulo', '<?php echo BASE_URL ?>cliente/eliminar', 'btnElimina', '<?php echo BASE_URL ?>cliente')">Eliminar</button>-->
+            <!--<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#modalConfirmacion">Eliminar</button>-->
+            <a class="btn btn-danger" id="btnElimina" onclick="confirmarEliminacion();">Eliminar</a>
+        </div>
+    </div>
+    <br>
+</form>
+<script>
+    function abreDetalle() {
+
+        $("#detalleTareas").show();
+
+    }
+    function ocultar() {
+
+        $("#detalleTareas").hide();
+
+    }
+
+    function confirmarEliminacion() {
+        var x = confirm("Está seguro de querer eliminar este nivel?");
+        
+        if (x){
+            Evento.prototype.procesoEnviaForm('formModulo', '<?php echo BASE_URL ?>nivel/eliminar', 'btnElimina', '<?php echo BASE_URL ?>nivel');
+        }
+        
+    }
+
+</script>
+
+
+
+

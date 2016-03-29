@@ -13,12 +13,16 @@
  */
 class areaDAO extends Model {
     
-    function getAreas($id = null) {
+    function getAreas($id = null, $idEvento = null) {
         $sql = "select a.idArea, a.nombre, a.evento_idEvento, e.nombre as nombreEvento from area a" 
                 . " inner join evento e on e.idEvento = a.evento_idEvento";
         
         if ($id != null) {
             $sql .= " where a.idArea = " . $id;
+        }
+        
+        if ($idEvento != null) {
+            $sql .= " where e.idEvento = " . $idEvento;
         }
         
         //echo $sql;
