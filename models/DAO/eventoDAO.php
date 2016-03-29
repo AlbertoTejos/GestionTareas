@@ -16,14 +16,20 @@ class eventoDAO extends Model{
     /*
      * Método encargada de traer todos los eventos para su administración
      */
-    function getEventos($id = null) {
+    function getEventos($idEvento, $idTrabajo) {
         $sql = "select e.idEvento, e.nombre, e.Trabajo_idTrabajo, t.tipificacion, p.nombre as 'proyecto' from evento e" 
                 . " inner join Trabajo t on t.idTrabajo = e.Trabajo_idTrabajo"
                 . " inner join producto p on p.idProducto = t.producto_idProducto ";
         
-        if ($id != null) {
-            $sql .= " where e.idEvento = " . $id;
+        if ($idEvento != null) {
+            $sql .= " where e.idEvento = " . $idEvento;
         }
+        
+        if ($idTrabajo != null) {
+            $sql .= " where t.idTrabajo = " . $idTrabajo;
+        }
+        
+       
         
         //Realizamos la consulta
         $datos = $this->_db->consulta($sql);

@@ -128,6 +128,8 @@ class moduloDAO extends Model {
             $sql .= " where t.producto_idProducto = " . $idProducto . "";
         }
         
+        //echo $sql;
+        
         $datos = $this->_db->consulta($sql);
         if ($this->_db->numRows($datos) > 0) {
 

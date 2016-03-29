@@ -69,6 +69,7 @@
 <script type="text/javascript" src="<?php echo $_layoutParams['ruta_public_js']; ?>Tarea.js"></script>
 <script type="text/javascript" src="<?php echo $_layoutParams['ruta_public_js']; ?>Informe.js"></script>
 <script type="text/javascript" src="<?php echo $_layoutParams['ruta_public_js']; ?>Evento.js"></script>
+<script type="text/javascript" src="<?php echo $_layoutParams['ruta_public_js']; ?>Area.js"></script>
 <!--    <script type="text/javascript" src="<?php echo $_layoutParams['ruta_js']; ?>jquery-ui.js"></script>-->
 <!--CORE JAVASCRIPT-->
 <script src="<?php echo $_layoutParams["ruta_template"] ?>script/main.js"></script>

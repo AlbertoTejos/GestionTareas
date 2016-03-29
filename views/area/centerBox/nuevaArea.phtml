@@ -3,11 +3,11 @@
         <div class="col-md-12">
             <div class="form-group">
                 <label class="control-label">Proyecto</label>
-                <select class="form-control" name="selectProyecto" id="selectProyecto" onchange="cargarTrabajos(this)">
+                <select class="form-control" id="selectProyecto" name="selectProyecto" id="selectProyecto" onchange="cargarTrabajos(this)">
                     <option value="">Seleccione un Proyecto...</option>
                     <?php if ($this->_proyectos) {
                         foreach ($this->_proyectos as $p){ 
-                            if($p->getId_producto() == $this->_seleccionado){?>
+                            if($p->getId_producto() == $this->_proyectoSeleccionado){?>
                                  <option selected value="<?php echo $p->getId_producto() ?>"><?php echo $p->getNombre() ?></option>
                             <?php }else { ?>
                             <option value="<?php echo $p->getId_producto() ?>"><?php echo $p->getNombre() ?></option>
@@ -19,11 +19,28 @@
         <div class="col-md-12">
             <div class="form-group">
                 <label class="control-label">Trabajo</label>
-                <select class="form-control" name="selectTrabajo">
+                <select class="form-control"  name="selectTrabajo" onchange="cargarEventos(this)">
                     <option value="">Seleccione un Trabajo...</option>
                     <?php if ($this->_trabajo) {
-                        foreach ($this->_trabajo as $t) { ?>                                              
+                        
+                        foreach ($this->_trabajo as $t) { 
+                            if($t->getIdHito() == $this->_trabajoSeleccionado){ ?>
+                                 <option selected value="<?php echo $t->getIdHito() ?>"><?php echo $t->getNombre() ?></option>
+                            <?php }else { ?>                                              
                             <option value="<?php echo $t->getIdHito() ?>"><?php echo $t->getNombre() ?></option>                                        
+                        <?php  } }
+                    } ?>
+                </select>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="form-group">
+                <label class="control-label">Evento</label>
+                <select class="form-control" name="selectEvento">
+                    <option value="">Seleccione un Evento...</option>
+                    <?php if ($this->_evento) {
+                        foreach ($this->_evento as $e) { ?>                                              
+                            <option value="<?php echo $e->getNombreEvento() ?>"><?php echo $e->getNombreEvento() ?></option>                                        
                     <?php  } 
                     } ?>
                 </select>
@@ -31,8 +48,8 @@
         </div>
         <div class="col-md-12">
             <div class="form-group">
-                <label class="control-label">Tipificación de Evento</label>
-                <input type="text" name="txtTipificacion" class="form-control">
+                <label class="control-label">Área de Servicio</label>
+                <input type="text" name="txtArea" class="form-control">
             </div>
         </div>
 <!--        <div class="col-md-12">
@@ -65,7 +82,15 @@
       
         var id = s[s.selectedIndex].value; 
         
-        Evento.prototype.abreModal('<?php echo BASE_URL ?>/evento/nuevo/'+id, 'Nuevo Evento', '');
+        Area.prototype.abreModal('<?php echo BASE_URL ?>/area/nuevo/'+id, 'Nueva Área', '');
+    }
+    
+    function cargarEventos(s){
+        
+        var idProyecto = $( "#selectProyecto" ).val();
+        var id = s[s.selectedIndex].value; 
+        
+        Area.prototype.abreModal('<?php echo BASE_URL ?>/area/nuevo/'+ idProyecto + '/' + id, 'Nueva Área', '');
     }
     
     </script>

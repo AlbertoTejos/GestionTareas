@@ -124,6 +124,8 @@ class eventoController extends Controller {
             //traemos el trabajo asociado
             $trabajo = $this->_trabajo->getModuloAdm(0, $idProducto);
             
+            
+            
             //enviamos el id del trabajo realizado para dejarlo seleccionado
             $this->_view->_seleccionado = $idProducto;
             
@@ -138,14 +140,16 @@ class eventoController extends Controller {
     function ingresar() {
         
         $proyecto = $this->getTexto('selectProyecto');
-        echo $proyecto;
+        //echo $proyecto;
         $trabajo = $this->getTexto('selectTrabajo');
-        echo $trabajo;
+        //echo $trabajo;
         $evento = $this->getTexto('txtTipificacion');
-        echo $evento;
+        //echo $evento;
         
         if (isset($proyecto) && isset($trabajo) && isset($evento)) {
             $this->_modelo->insertar($trabajo, $evento);
+        }else{
+            echo "Debe completar los campos requeridos";
         }            
     }
 
