@@ -19,6 +19,7 @@ class moduloController extends Controller {
         $this->_tarea = $this->loadModel('tarea');
         $this->_usuario = $this->loadModel('usuario');
         $this->_estado = $this->loadModel('estado');
+        $this->_archivo = $this->loadModel('archivo');
     }
 
     public function index() {
@@ -277,12 +278,12 @@ class moduloController extends Controller {
         }
         //echoS 'OK';
     }
-    
-    public function eliminarTrabajo(){
-        
-        $id = $this->getTexto('Mm_id_hito');     
+
+    public function eliminarTrabajo() {
+
+        $id = $this->getTexto('Mm_id_hito');
         $sql = "delete from trabajo where idTrabajo = " . $id;
-        
+
         if ($this->_tarea->exeSQL($sql)) {
             echo "OK";
         }
@@ -356,7 +357,7 @@ class moduloController extends Controller {
             $mail->addBCC('atejos@peg.cl', 'Alberto Tejos');
             $mail->addBCC('jvalenzuela@peg.cl', 'Juan Valenzuela');
             $mail->addBCC('mcofre@peg.cl', 'Marcelo Cofré');
-            
+
 
             if ($mail->Send()) {
                 return true;
@@ -532,131 +533,190 @@ class moduloController extends Controller {
         }
     }
 
-    private function validaSolicitud($modulo, $nombreTicket, $descripcionProblema, $solucionPropuesta, $tipologia, $prioridad) {
-        if ($modulo == 0 || $modulo == null) {
-            return false;
-        }
-        if ($nombreTicket == "" || $nombreTicket == null) {
-            return false;
-        }
+    private function validaSolicitud($descripcionProblema, $solucionPropuesta, $proyecto, $evento, $trabajo, $nivel, $servicio, $area) {
+//        if ($proyecto == 0 || $proyecto == null) {
+//            return false;
+//        }
+//        if ($evento == 0 || $evento == null) {
+//            return false;
+//        }
+
         if ($descripcionProblema == "" || $descripcionProblema == null) {
             return false;
         }
         if ($solucionPropuesta == "" || $solucionPropuesta == null) {
             return false;
         }
-        if ($tipologia == "" || $tipologia == null) {
+//        if ($trabajo == 0 || $trabajo == null) {
+//            return false;
+//        }
+//        if ($nivel == 0 || $nivel == null) {
+//            return false;
+//        }
+        if ($servicio == 0 || $servicio == null) {
             return false;
         }
-        if ($prioridad == "" || $prioridad == null) {
-            return false;
-        }
+//        if ($area == 0 || $area == null) {
+//            return false;
+//        }
+
 
         return true;
     }
 
     public function insertSolicitud() {
         try {
-            $fechaReporte = date('d/m/Y');
-            $horaReporte = date('H:i:s');
-            //echo $fechaReporte;
-            $modulo = $this->getTexto("st_hito");
 
-            $nombreTicket = $this->getTexto("it_txtNombreTicket");
-            $formularioObjetivo = $this->getTexto("it_txtFormularioObjetivo");
-            $descripcionProblema = $this->getTexto("it_txtaDescripcionProblema");
-            $solucionPropuesta = $this->getTexto("it_txtaSolucionPropuesta");
-            $flujoCorrecto = $this->getTexto("it_txtaFlujoCorrecto");
-            $tipologia = $this->getTexto("rdbtnTipoologia");
-            $prioridad = $this->getTexto("rdbtnPrioridad");
-            $horas = 0;
-            $ultTareaDao = $this->_tarea->getUltTarea();
-            if ($ultTareaDao) {
-                $ultimoId = $ultTareaDao[0]->getIdTarea();
-            }
-
-            //$ultimoId = mysql_insert_id();
-            //Oportunidad de mejora, por temas de no hacer llamadas a la base de datos en temas de traer el detalle del nombre de la prioridad y de la mejora
-            //solo se van hacer validaciones directas en el codigo JRR 09/03/2016
-            $nombrePrioridad = '';
-            $nombreTipologia = '';
-            if ($prioridad == '1') {
-                $nombrePrioridad = 'Urgente';
-            }
-            if ($prioridad == '2') {
-                $nombrePrioridad = 'Alta';
-            }
-            if ($prioridad == '3') {
-                $nombrePrioridad = 'Normal';
-            }
-            if ($tipologia == '1') {
-                $nombreTipologia = 'Falla';
-            }
-            if ($tipologia == '2') {
-                $nombreTipologia = 'Incidencia';
-            }
-            if ($tipologia == '3') {
-                $nombreTipologia = 'Mejora';
-            }
-
-            //Matriz de prioridad y de tipología para establecer las horas correspondientes
-
-            if ($prioridad == '1' && $tipologia == '1') {
-                $horas = 3.5;
-            }
-            if ($prioridad == '1' && $tipologia == '2') {
-                $horas = 8;
-            }
-            if ($prioridad == '1' && $tipologia == '3') {
-                $horas = 0;
-            }
-            if ($prioridad == '2' && $tipologia == '1') {
-                $horas = 1.5;
-            }
-            if ($prioridad == '2' && $tipologia == '2') {
-                $horas = 12;
-            }
-            if ($prioridad == '2' && $tipologia == '3') {
-                $horas = 0;
-            }
-            if ($prioridad == '3' && $tipologia == '1') {
-                $horas = 8;
-            }
-            if ($prioridad == '3' && $tipologia == '2') {
-                $horas = 24;
-            }
-            if ($prioridad == '3' && $tipologia == '3') {
-                $horas = 0;
-            }
-            //echo $tipologia.'<-Tipologia Prioridad->'.$prioridad.' Horas='.$horas;
-
-            if (!$this->validaSolicitud($modulo, $nombreTicket, $descripcionProblema, $solucionPropuesta, $tipologia, $prioridad)) {
-                echo "Ingrese el campo requerido";
+            //Verificamos si efectivamente seleccionó un archivo
+            if (!isset($_FILES['archivo']) || $_FILES['archivo']['error'] == UPLOAD_ERR_NO_FILE) {
+                if ($this->ingresarSolicitud() == TRUE) {
+                    echo "OK";
+                }
             } else {
 
-                $sql = "INSERT INTO tarea(`nombre`,`descripcion`,`formulario`,`flujoCorrecto`,`fechaReporte`,`solucionPropuesta`,
-                `Estado_idEstado`,`Nivel_idNivel`,`Hito_idHito`,`Evento_idEvento`,id_usuario_crea_tarea, horasEstimadas)
-                VALUES('" . $nombreTicket . "',
-                '" . $descripcionProblema . "','',
-                '',current_timestamp(),
-                '" . $solucionPropuesta . "',1," . $prioridad . "," . $modulo . "," . $tipologia . "," . Session::get('SESS_ID_USER') . "," . $horas . ")";
-                $consulta = $this->_tarea->exeSQL($sql);
-                if ($consulta) {
+                if ($this->ingresarSolicitud() == TRUE) {
+                    $valid_extensions = array('xls', 'xlsx', 'xlsm', 'xlsb', 'xltx', 'xltm', 'xlt', 'xml', 'xlw', 'xla', 'xlam',
+                        'doc', 'docx', 'dotx', 'dot', 'txt', 'pdf');
 
-                    if ($this->correo($nombreTicket, $descripcionProblema, $fechaReporte, $horaReporte, 'Solicitud de tarea', Session::get('SESS_NOMBRE'), Session::get('SESS_CORREO'), $nombrePrioridad, $nombreTipologia, $ultimoId)
-                    ) {
-                        echo "OK";
+                    $path = ROOT . 'subidas\\';
+
+
+                    $img = $_FILES['archivo']['name'];
+                    $tmp = $_FILES['archivo']['tmp_name'];
+
+                    // obtenemos la extensión
+                    $ext = strtolower(pathinfo($img, PATHINFO_EXTENSION));
+
+                    //campos para verificar que estamos asociando el documento a la tarea indicada
+                    $descripcionProblema = $this->getTexto("txtDescripcion");
+                    $solucionPropuesta = $this->getTexto("txtSolucion");
+
+                    //traemos el id de la tarea ingresada anteriormente
+                    $tarea = $this->_tarea->getTarea(null, $descripcionProblema, $solucionPropuesta);
+                    $id = $tarea[0]->getIdTarea();
+
+                    // id de la solicitud + el nombre del archivo subido
+                    $final_image = $id . " - " . $img;
+
+                    // verificamos el formato correcto
+                    if (in_array($ext, $valid_extensions)) {
+                        $path = $path . strtolower($final_image);
+
+                        if (move_uploaded_file($tmp, $path)) {
+                            //ha sido movido correctamente al servidor                                                    
+                            if ($this->_archivo->ingresar($id, $path)) {
+                                echo "OK";
+                            }
+                        }
                     } else {
-                        echo "No se pudo enviar el correo";
+                        echo 'Archivo inválido, sólo es permitido formato Excel y Word';
                     }
-                } else {
-                    echo 'No se pudo insertar la tarea';
                 }
             }
         } catch (mysqli_sql_exception $ex) {
             echo $ex;
         }
-        //echoS 'OK';
+    }
+
+    public function ingresarSolicitud() {
+
+
+        $fechaReporte = date('d/m/Y');
+        $horaReporte = date('H:i:s');
+        $descripcionProblema = $this->getTexto("txtDescripcion");
+        $solucionPropuesta = $this->getTexto("txtSolucion");
+        $proyecto = $this->getTexto("selectProyecto");
+        $evento = $this->getTexto("selectEvento");
+        $trabajo = $this->getTexto("selectTrabajo");
+        $nivel = $this->getTexto("selectNivel");
+        $servicio = $this->getTexto("selectServicio");
+        $area = $this->getTexto("selectArea");
+
+        $horas = 0;
+        $ultTareaDao = $this->_tarea->getUltTarea();
+        if ($ultTareaDao) {
+            $ultimoId = $ultTareaDao[0]->getIdTarea();
+        }
+
+        //$ultimoId = mysql_insert_id();
+        //Oportunidad de mejora, por temas de no hacer llamadas a la base de datos en temas de traer el detalle del nombre de la prioridad y de la mejora
+        //solo se van hacer validaciones directas en el codigo JRR 09/03/2016
+//        $nombrePrioridad = '';
+//        $nombreTipologia = '';
+//        if ($prioridad == '1') {
+//            $nombrePrioridad = 'Urgente';
+//        }
+//        if ($prioridad == '2') {
+//            $nombrePrioridad = 'Alta';
+//        }
+//        if ($prioridad == '3') {
+//            $nombrePrioridad = 'Normal';
+//        }
+//        if ($tipologia == '1') {
+//            $nombreTipologia = 'Falla';
+//        }
+//        if ($tipologia == '2') {
+//            $nombreTipologia = 'Incidencia';
+//        }
+//        if ($tipologia == '3') {
+//            $nombreTipologia = 'Mejora';
+//        }
+//
+//        //Matriz de prioridad y de tipología para establecer las horas correspondientes
+//
+//        if ($prioridad == '1' && $tipologia == '1') {
+//            $horas = 3.5;
+//        }
+//        if ($prioridad == '1' && $tipologia == '2') {
+//            $horas = 8;
+//        }
+//        if ($prioridad == '1' && $tipologia == '3') {
+//            $horas = 0;
+//        }
+//        if ($prioridad == '2' && $tipologia == '1') {
+//            $horas = 1.5;
+//        }
+//        if ($prioridad == '2' && $tipologia == '2') {
+//            $horas = 12;
+//        }
+//        if ($prioridad == '2' && $tipologia == '3') {
+//            $horas = 0;
+//        }
+//        if ($prioridad == '3' && $tipologia == '1') {
+//            $horas = 8;
+//        }
+//        if ($prioridad == '3' && $tipologia == '2') {
+//            $horas = 24;
+//        }
+//        if ($prioridad == '3' && $tipologia == '3') {
+//            $horas = 0;
+//        }
+        //echo $tipologia.'<-Tipologia Prioridad->'.$prioridad.' Horas='.$horas;
+
+        if (!$this->validaSolicitud($descripcionProblema, $solucionPropuesta, $proyecto, $evento, $trabajo, $nivel, $servicio, $area)) {
+            echo "Debe ingresar/seleccionar los campos requeridos";
+            return false;
+        } else {
+
+            $sql = "INSERT INTO tarea(`descripcionProblema`,`solucionPropuesta`,`estado_idEstado`,`servicio_idServicio`,`fechaReporte`,`idUsuarioAsigna`)
+                VALUES('" . $descripcionProblema . "', '" . $solucionPropuesta . "', 1 , " . $servicio . ", current_timestamp() , " . Session::get('SESS_ID_USER') . ")";
+
+
+            $consulta = $this->_tarea->exeSQL($sql);
+            if ($consulta) {
+
+                return true;
+//                if ($this->correo($nombreTicket, $descripcionProblema, $fechaReporte, $horaReporte, 'Solicitud de tarea', Session::get('SESS_NOMBRE'), Session::get('SESS_CORREO'), $nombrePrioridad, $nombreTipologia, $ultimoId)
+//                ) {
+//                    echo "OK";
+//                } else {
+//                    echo "No se pudo enviar el correo";
+//                }
+            } else {
+                echo 'No se pudo insertar la tarea';
+                return false;
+            }
+        }
     }
 
     public function modificaHito() {
@@ -666,7 +726,7 @@ class moduloController extends Controller {
         if ($this->validaModificaHito($nombre) == false) {
             
         } else {
-            $sql = "UPDATE trabajo set tipificacion ='" . $nombre  . "' where idTrabajo = " . $id . "";
+            $sql = "UPDATE trabajo set tipificacion ='" . $nombre . "' where idTrabajo = " . $id . "";
 
 
             if ($this->_modulo->exeSQL($sql)) {
@@ -679,7 +739,7 @@ class moduloController extends Controller {
     }
 
     public function validaModificaHito($nombre) {
-        
+
         if (!$nombre) {
             echo "El nombre no puede estar vacío";
             return false;
@@ -724,13 +784,13 @@ class moduloController extends Controller {
         $id_usuario = $this->getTexto("usuarioAsignacion");
         $fechaAsignacion = $this->getTexto("fechaAsignacion");
         $fechaFinalizacion = $this->getTexto("fechaTermino");
-        
+
         $tarea = $this->_tarea->getTareaId($id_tarea1);
         $evento = $tarea[0]->getNombre_evento();
-        
+
         if ($this->getTexto("horaAsignadas") != null) {
             $horasDias = $this->getTexto("horaAsignadas");
-        }else{
+        } else {
             $horasDias = 0;
         }
         $nombreTarea = $this->getTexto("it_nombre_tarea");
@@ -820,17 +880,16 @@ class moduloController extends Controller {
         } else if ($evento != "Mejora" && ($segundosHorasDias > $horasDias * 3600)) {
             echo "Sobrepasa la cantidad de horas para la asignaci&oacute;n";
             return false;
-        }else if ($segundos < strtotime ($fechaInicio)) {
+        } else if ($segundos < strtotime($fechaInicio)) {
             echo "La fecha de asignación ingresada no puede ser menor a la fecha de la tarea general";
             return false;
-        } else 
-        if ($segundos2 > strtotime ($fechaTermino)) {
+        } else
+        if ($segundos2 > strtotime($fechaTermino)) {
             echo "La fecha de término de asignación ingresada no puede ser mayor a la fecha de la tarea general";
             return false;
-        } 
-        
+        }
+
         return true;
-        
     }
 
     public function asignarTareaUsuario() {
@@ -844,12 +903,12 @@ class moduloController extends Controller {
             $horasDias = 0;
         }
         $hito = $this->getTexto("it_id_hito_asignacion");
-        
-        
+
+
         $tarea = $this->_tarea->getTareaId($id_tarea1);
         $fechaInicio = $tarea[0]->getFechaInicio();
         $fechaTermino = $tarea[0]->getFechaTermino();
-        
+
 
         if (!$this->validacionTareaUsuario($fechaInicio, $fechaTermino, $fechaAsignacion2, $fechaFinalizacion2)) {
             
@@ -881,23 +940,21 @@ class moduloController extends Controller {
             //Session::set('t_user', 1);
         }
     }
-    
-      function validacionTareaUsuario($fechaInicio, $fechaTermino, $fechaAsignacion2, $fechaFinalizacion2) {
+
+    function validacionTareaUsuario($fechaInicio, $fechaTermino, $fechaAsignacion2, $fechaFinalizacion2) {
 
 
         if (strtotime($fechaAsignacion2) < strtotime($fechaInicio)) {
             echo "La fecha de asignación ingresada no puede ser menor a la fecha de la tarea general";
             return false;
-        } else 
+        } else
         if (strtotime($fechaFinalizacion2) > strtotime($fechaTermino)) {
             echo "La fecha de término de asignación ingresada no puede ser mayor a la fecha de la tarea general";
             return false;
-        } 
+        }
 
         return true;
     }
-
-
 
     public function iniciarProceso() {
         $id_tarea = $this->getTexto("it_id_tarea_proceso");
@@ -984,5 +1041,5 @@ class moduloController extends Controller {
             }
         }
     }
+
 }
-  

@@ -37,7 +37,7 @@ class tareaDAO extends Model {
         }
     }
 
-    public function getTarea($id, $orden) {
+    public function getTareaByHito($id, $orden) {
         
         $sql = "SELECT a.nombre, "
                 . "a.Hito_idHito, "
@@ -117,40 +117,39 @@ class tareaDAO extends Model {
         }     
     }
 
-    public function getTareaId($id) {
-        $sql = "SELECT a.nombre, "
-                . "a.Hito_idHito, "
-                . "a.Descripcion, "
-                . "a.idTarea, "
-                . "a.fechaReporte, "
-                . "a.horasEstimadas, "
-                . "u.nombreUsuario as nombreadmin, "
-                . "a.fechaInicio, "
-                . "a.fechaTermino, "
-                . "tu.fechaTerminoActividad, "
-                . "tu.horasDia, "
-                . "a.Nivel_idNivel, "
-                . "a.solucionPropuesta, "
-                . "b.nombre as nivelnombre, "
-                . "a.Estado_idEstado, "
-                . "c.Nombre, "
-                . "e.nombre as nombreevento, "
-                . "b.nombre as nombrenivel, "
-                . "a.id_usuario_crea_tarea as id_user_clie "
-                . "FROM tarea a "
-                . "inner join nivel b "
-                . "on a.Nivel_idNivel = b.idNivel "
-                . "inner join estado c "
-                . "on a.Estado_idEstado = c.idEstado "
-                . "inner join evento e "
-                . "on e.idEvento = a.Evento_idEvento "
-                . "inner join usuario u "
-                . "on u.idUsuario = a.id_usuario_crea_tarea "
-                . "left join tarea_usuario tu "
-                . "on tu.Tarea_idTarea = a.idTarea "
-                . "where a.idTarea = " . $id . "";
+    public function getTarea($id, $descripcion = null, $solucion = null) {
         
-        //echo $sql;
+        $sql = "SELECT "
+                . "a.idTarea, "
+                . "a.descripcionProblema, "
+                . "a.solucionPropuesta, "
+                . "e.idEstado, "
+                . "a.servicio_idServicio, "
+                . "a.fechaReporte, "
+                . "a.idUsuarioAsigna "
+                . "FROM tarea a "
+                . "inner join estado e "
+                . "on a.estado_idEstado = e.idEstado "
+                . "inner join usuario u "
+                . "on u.idUsuario = a.idUsuarioAsigna "
+                . "left join tarea_usuario tu "
+                . "on tu.Tarea_idTarea = a.idTarea ";
+        
+        $aux = "where "; 
+        
+        if ($id != null) {
+            $sql .= "where a.idTarea = " . $id . " ";
+            $aux = "and ";
+        }
+        
+        if ($descripcion != null) {
+            $sql .= $aux . " a.descripcionProblema = '" . $descripcion . "' ";
+            $aux = "and ";          
+        }
+        
+        if ($solucion != null) {
+            $sql .= $aux . " a.solucionPropuesta = '" . $solucion . "' ";
+        }
         
         $datos = $this->_db->consulta($sql);
         if ($this->_db->numRows($datos) > 0) {
@@ -160,25 +159,25 @@ class tareaDAO extends Model {
 
             foreach ($modArray as $moddb) {
                 $modObj = new tareaDTO();
-                $modObj->setNombre(trim($moddb['nombre']));
-                $modObj->setId_hito(trim($moddb['Hito_idHito']));
+//                $modObj->setNombre(trim($moddb['nombre']));
+//                $modObj->setId_hito(trim($moddb['Hito_idHito']));
                 $modObj->setIdTarea(trim($moddb['idTarea']));
-                $modObj->setId_nivel(trim($moddb['Nivel_idNivel']));
-                $modObj->setDescripcion(trim($moddb['nivelnombre']));
-                $modObj->setDescripcionTarea(trim($moddb['Descripcion']));
-                $modObj->setId_estado(trim($moddb['Estado_idEstado']));
-                $modObj->setNombre_Estado(trim($moddb['Nombre']));
-                $modObj->setNombre_evento(trim($moddb['nombreevento']));
-                $modObj->setNombre_nivel(trim($moddb['nombrenivel']));
+//                $modObj->setId_nivel(trim($moddb['Nivel_idNivel']));
+//                $modObj->setDescripcion(trim($moddb['nivelnombre']));
+                $modObj->setDescripcionTarea(trim($moddb['descripcionProblema']));
+                $modObj->setId_estado(trim($moddb['idEstado']));
+//                $modObj->setNombre_Estado(trim($moddb['Nombre']));
+//                $modObj->setNombre_evento(trim($moddb['nombreevento']));
+//                $modObj->setNombre_nivel(trim($moddb['nombrenivel']));
                 $modObj->setFechaReporte(trim($moddb['fechaReporte']));
-                $modObj->setHorasEstimadas(trim($moddb['horasEstimadas']));
-                $modObj->setFechaInicio(trim($moddb['fechaInicio']));
-                $modObj->setFechaTermino(trim($moddb['fechaTermino']));
-                $modObj->setNombre_admin_asigna(trim($moddb['nombreadmin']));
+//                $modObj->setHorasEstimadas(trim($moddb['horasEstimadas']));
+//                $modObj->setFechaInicio(trim($moddb['fechaInicio']));
+//                $modObj->setFechaTermino(trim($moddb['fechaTermino']));
+//                $modObj->setNombre_admin_asigna(trim($moddb['nombreadmin']));
                 $modObj->setSolucionPropuesta(trim($moddb['solucionPropuesta']));
-                $modObj->setId_user(trim($moddb['id_user_clie']));
-                $modObj->setFechaTerminoActividad(trim($moddb['fechaTerminoActividad']));
-                $modObj->setHorasDias(trim($moddb['horasDia']));
+                $modObj->setId_user(trim($moddb['idUsuarioAsigna']));
+//                $modObj->setFechaTerminoActividad(trim($moddb['fechaTerminoActividad']));
+//                $modObj->setHorasDias(trim($moddb['horasDia']));
                 $moArray[] = $modObj;
             }
 

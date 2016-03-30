@@ -27,14 +27,14 @@ class avanceController extends Controller {
             $this->_view->_tituloPanel = "Tareas solicitadas";
             $this->_view->_titulo = "Monitor de Avances";
             //usuario Dino Sename 
-            $avances = $this->_modelo->getAvances($usuario, 0);
-            $this->_view->_avances = $avances;
-
-            $avances2 = $this->_modelo->getAvances($usuario,0, true);
-            $this->_view->_avances2 = $avances2;
-            
-            
-            $this->_view->_usuario = $usuario;
+//            $avances = $this->_modelo->getAvances($usuario, 0);
+//            $this->_view->_avances = $avances;
+//
+//            $avances2 = $this->_modelo->getAvances($usuario,0, true);
+//            $this->_view->_avances2 = $avances2;
+//            
+//            
+//            $this->_view->_usuario = $usuario;
             $this->_view->renderizarSistema('avance');
             
         } else {
@@ -49,14 +49,14 @@ class avanceController extends Controller {
             $this->_view->_tituloPanel = "Tareas solicitadas";
             $this->_view->_titulo = "Monitor de Avances";
             //usuario Dino Sename 
-            $avances = $this->_modelo->getAvances($usuario, 0);
-            $this->_view->_avances = $avances;
-
-            $avances2 = $this->_modelo->getAvances($usuario,0, true);
-            $this->_view->_avances2 = $avances2;
-            
-            
-            $this->_view->_usuario = $usuario;
+//            $avances = $this->_modelo->getAvances($usuario, 0);
+//            $this->_view->_avances = $avances;
+//
+//            $avances2 = $this->_modelo->getAvances($usuario,0, true);
+//            $this->_view->_avances2 = $avances2;
+//            
+//            
+//            $this->_view->_usuario = $usuario;
             $this->_view->renderizaLogin('avance');
             
         } else {
@@ -67,15 +67,15 @@ class avanceController extends Controller {
     
     public function detalles($idUsuario, $idTarea,  $bol = false) {
         
-        $usuario = Session::get('SESS_ID_USER');
-        
-        if ($bol) {
-            $avances = $this->_modelo->getAvances($usuario,$idTarea, true);
-        }else{
-            $avances = $this->_modelo->getAvances($usuario, $idTarea);
-        }
-        
-        $this->_view->_avances = $avances;
+//        $usuario = Session::get('SESS_ID_USER');
+//        
+//        if ($bol) {
+//            $avances = $this->_modelo->getAvances($usuario,$idTarea, true);
+//        }else{
+//            $avances = $this->_modelo->getAvances($usuario, $idTarea);
+//        }
+//        
+//        $this->_view->_avances = $avances;
         $this->_view->renderizaCenterBox('detalleAvance');
     }
 

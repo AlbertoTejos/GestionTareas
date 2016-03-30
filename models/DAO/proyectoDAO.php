@@ -203,10 +203,9 @@ class proyectoDAO extends Model {
 
     public function insertarProyecto($nombre, $nemo, $idCliente) {
 
-        $sql = "insert into producto (idProducto, nombre, nemo, Cliente_idCliente)"
-                . "values ('NULL', '$nombre', '$nemo', '$idCliente')";
-
-
+        $sql = "insert into producto (nombre, nemo, Cliente_idCliente)"
+                . " values ('$nombre', '$nemo', '$idCliente')";
+        
         try {
 
             if ($this->_db->consulta($sql)) {

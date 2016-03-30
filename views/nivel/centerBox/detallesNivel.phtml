@@ -15,25 +15,24 @@
         <div class="col-md-12">
             <div class="form-group">
                 <label>Tiempo máximo</label>
-                <!-- ACÁ TYPE TIME  -->
-                <input type="text"  class="form-control"  name="txtNombreCorto" value="<?php echo $this->_tiempoMaximo ?>">
+                <input type="time"  class="form-control"  name="txtTiempoMaximo" value="<?php echo substr($this->_tiempoMaximo, -8, 5) ?>">
             </div>  
         </div>
         <div class="col-md-12">
             <div class="form-group">
                 <label>ID Proyecto</label>
-                <input type="text" disabled="true" class="form-control"  name="txtNombreCorto" value="<?php echo $this->_idProyecto ?>">
+                <input type="text" disabled="true" class="form-control"  name="txtIdProyecto" value="<?php echo $this->_idProyecto ?>">
             </div>  
         </div>
         <div class="col-md-12">
             <div class="form-group">
                 <label>Proyecto</label>
-                <input type="text" disabled="true" class="form-control"  name="txtNombreCorto" value="<?php echo $this->_nombreProyecto ?>">
+                <input type="text" disabled="true" class="form-control"  name="txtNombreProyecto" value="<?php echo $this->_nombreProyecto ?>">
             </div>  
         </div>
         <br>
     </div>
-    <div class="col-lg-12">
+    <div class="col-lg-12" style="padding-right: 0">
         <div class="form-group text-right">
             <!--<a href="#" onclick="abreDetalle()" class="btn btn-primary">&nbsp;  &nbsp; Ver Detalle   &nbsp;  &nbsp;</a>-->
             <a class="btn btn-success" id="btnModifica" onclick="Nivel.prototype.procesoEnviaForm('formModulo', '<?php echo BASE_URL ?>nivel/modificar', 'btnModifica', '<?php echo BASE_URL ?>nivel')">Modificar</a>

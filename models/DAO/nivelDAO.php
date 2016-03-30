@@ -94,6 +94,7 @@ class nivelDAO extends Model {
         
         $sql = "update nivel set nombre = '" . $nombreNivel . "', tiempoMaximo = '" . $tiempoMaximo . "' where idNivel = " . $idNivel;     
         
+        
         if ($this->_db->consulta($sql)) {
             echo "OK";
         }else{

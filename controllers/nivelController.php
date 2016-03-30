@@ -12,15 +12,15 @@
  * @author Beto
  */
 class nivelController extends Controller {
-    
+
     public function __construct() {
         parent::__construct();
         $this->_modelo = $this->loadModel('nivel');
         $this->_proyecto = $this->loadModel('proyecto');
     }
-    
+
     public function index() {
-        
+
         $this->_view->_titulo = "Administraci&oacute;n de Niveles de Criticidad";
         $this->_view->_tituloPanel = "Niveles de Criticidad";
 
@@ -59,7 +59,7 @@ class nivelController extends Controller {
 
 
         //Traemos todos los clientes para ver el total de registros
-        $niveles= $this->_modelo->getNiveles();
+        $niveles = $this->_modelo->getNiveles();
 
 
 
@@ -78,101 +78,66 @@ class nivelController extends Controller {
         $this->_view->_niveles = $nivelesFiltrados;
         $this->_view->renderizarSistema('nivel');
     }
-    
+
     //modificar
-    function nuevo($idProyecto = null, $idTrabajo = null) {
-        
-//        echo $idProyecto;
-//        echo $idTrabajo;
-        
+    function nuevo() {
+
         //cargamos los proyectos
         $proyectos = $this->_proyecto->getTodosProyectos();
         $this->_view->_proyectos = $proyectos;
-        
-        if ($idProyecto != null && $idTrabajo == null) {
-   
-            //traemos el trabajo asociado
-            $trabajo = $this->_trabajo->getModuloAdm(0, $idProyecto);  
-            
-            //enviamos el id del proyecto realizado para dejarlo seleccionado
-            $this->_view->_proyectoSeleccionado = $idProyecto;
-            
-             //enviamos los datos para cargar las listas desplegables          
-            $this->_view->_trabajo = $trabajo;
-            
-            
-        }else{
-            
-            //traemos el trabajo asociado
-            $trabajo = $this->_trabajo->getModuloAdm(0, $idProyecto);  
-            
-            //enviamos el id del proyecto realizado para dejarlo seleccionado
-            $this->_view->_proyectoSeleccionado = $idProyecto;
-            
-             //enviamos los datos para cargar las listas desplegables          
-            $this->_view->_trabajo = $trabajo;
-            
-            //traemos el evento asociado
-            $evento = $this->_evento->getEventos(null, $idTrabajo);  
-            
-            //echo var_dump($evento);
-            
-            //enviamos el id del trabajo realizado para dejarlo seleccionado
-            $this->_view->_trabajoSeleccionado = $idTrabajo;
-            
-             //enviamos los datos para cargar las listas desplegables          
-            $this->_view->_evento = $evento;
-            
-        }
-    
+
+
+
         $this->_view->renderizaCenterBox('nuevoNivel');
     }
-    
-    function ingresar(){
-        
+
+    function ingresar() {
+
         $proyecto = $this->getTexto('selectProyecto');
-        $trabajo = $this->getTexto('selectTrabajo');
-        $evento = $this->getTexto('selectEvento');
-        $area = $this->getTexto('txtArea');
-        
-        if (isset($proyecto) && isset($trabajo) && isset($evento) && isset($area)) {
-            $this->_modelo->insertar($evento, $area);
-        }else{
+        $tiempo = $this->getTexto('txtTiempo');
+        $nombre = $this->getTexto('txtNombre');
+
+        if (isset($proyecto) && isset($tiempo) && isset($nombre)) {
+            $tiempoMaximo = "0000-00-00 " . $tiempo;
+            $this->_modelo->insertar($nombre, $tiempoMaximo, $proyecto);
+        } else {
             echo "Debe completar los campos requeridos";
         }
     }
-    
-    function detalleNivel($id){
-        
+
+    function detalleNivel($id) {
+
         $niveles = $this->_modelo->getNiveles($id);
-               
+
         $this->_view->_idNivel = $niveles[0]->getIdNivel();
         $this->_view->_nombre = $niveles[0]->getNombreNivel();
         $this->_view->_tiempoMaximo = $niveles[0]->getTiempoMaximo();
         $this->_view->_idProyecto = $niveles[0]->getIdProyecto();
         $this->_view->_nombreProyecto = $niveles[0]->getNombreProyecto();
-        
+
         $this->_view->renderizaCenterBox('detallesNivel');
     }
-    
+
     function modificar() {
-        
+
         $id = $this->getTexto('txtId');
         $nombre = $this->getTexto('txtNombre');
-        $tiempoMaximo = $this->getTexto('txtTiempoMaximo');
-        
-        if ($this->_modelo->modificar($id, $nombre, $tiempoMaximo)) {
-            echo "OK";
+        $tiempo = $this->getTexto('txtTiempoMaximo');
+
+        if (isset($id) && isset($tiempo) && isset($nombre)) {
+            $tiempoMaximo = "0000-00-00 " . $tiempo;
+            if ($this->_modelo->modificar($id, $nombre, $tiempoMaximo)) {
+                echo "OK";
+            }
         }
-        
     }
-    
+
     function eliminar() {
-        
+
         $id = $this->getTexto('txtId');
         if ($this->_modelo->eliminar($id)) {
             echo "OK";
         }
-        
     }
+
 }

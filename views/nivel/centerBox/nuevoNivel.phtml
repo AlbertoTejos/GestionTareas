@@ -1,0 +1,37 @@
+<div class="row">
+    <form class="form" method="post">
+        <div class="col-md-12">
+            <div class="form-group">
+                <label class="control-label">Proyecto</label>
+                <select class="form-control" name="selectProyecto" id="selectProyecto" onchange="cargarTrabajos(this)">
+                    <option value="">Seleccione un Proyecto...</option>
+                    <?php if ($this->_proyectos) {
+                        foreach ($this->_proyectos as $p){ 
+                            if($p->getId_producto() == $this->_seleccionado){?>
+                                 <option selected value="<?php echo $p->getId_producto() ?>"><?php echo $p->getNombre() ?></option>
+                            <?php }else { ?>
+                            <option value="<?php echo $p->getId_producto() ?>"><?php echo $p->getNombre() ?></option>
+                        <?php }    }              
+                    } ?>
+                </select>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="form-group">
+                <label class="control-label">Nombre del Nivel</label>
+                <input type="text" name="txtNombre" class="form-control">
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="form-group">
+                <label class="control-label">Tiempo máximo</label>
+                <input type="time" name="txtTiempo" class="form-control">
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="form-group text-right">
+                    <button type="submit" id="btn" class="btn btn-yellow" onclick="Nivel.prototype.procesoEnviaForm('form', '<?php echo BASE_URL ?>nivel/ingresar', 'btn', '<?php echo BASE_URL ?>nivel')">Guardar</button>
+            </div>
+        </div>
+    </form>
+</div>
