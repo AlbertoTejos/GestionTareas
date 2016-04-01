@@ -104,11 +104,8 @@
     function cargarAreas(s){
         
         var idProyecto = $( "#selectProyecto" ).val();
-        alert(idProyecto);
         var idTrabajo = $( "#selectTrabajo" ).val();
-        alert(idTrabajo);
         var idEvento = s[s.selectedIndex].value; 
-        alert(idEvento);
         
         Servicio.prototype.abreModal('<?php echo BASE_URL ?>/servicio/nuevo/'+ idProyecto + '/' + idTrabajo + '/' + idEvento, 'Nuevo Servicio', '');
     }

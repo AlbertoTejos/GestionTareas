@@ -20,6 +20,10 @@ class moduloController extends Controller {
         $this->_usuario = $this->loadModel('usuario');
         $this->_estado = $this->loadModel('estado');
         $this->_archivo = $this->loadModel('archivo');
+        $this->_evento = $this->loadModel('evento');
+        $this->_area = $this->loadModel('area');
+        $this->_servicio = $this->loadModel('servicio');
+        $this->_nivel = $this->loadModel('nivel');
     }
 
     public function index() {
@@ -207,10 +211,50 @@ class moduloController extends Controller {
         $this->_view->renderizaCenterBox('admModuloInsert');
     }
 
-    public function abreSolicitudTareas() {
-        $adm_modulo = $this->_proyecto->getProductosUsuarios();
-        $this->_view->_getModulo = $adm_modulo;
+    public function abreSolicitudTareas($idProyecto = null, $idTrabajo = null, $idEvento = null, $idArea = null, $idServicio = null) {
+        
+        //cargamos los proyectos
+        $proyectos = $this->_proyecto->getTodosProyectos();
+        $this->_view->_proyectos = $proyectos;
+        
+        if ($idProyecto != null && ($idTrabajo == null && $idEvento == null && $idArea = null && $idServicio = null)) {
+   
+            //traemos el trabajo asociado
+            $trabajo = $this->_modulo->getModuloAdm(0, $idProyecto);  
+            
+            //enviamos el id del proyecto realizado para dejarlo seleccionado
+            $this->_view->_proyectoSeleccionado = $idProyecto;
+            
+             //enviamos los datos para cargar las listas desplegables          
+            $this->_view->_trabajo = $trabajo;
+            
+            
+        }else{
+            
+            $trabajo = $this->_modulo->getModuloAdm(0, $idProyecto);              
+            $this->_view->_proyectoSeleccionado = $idProyecto;                 
+            $this->_view->_trabajo = $trabajo;         
+           
+            $evento = $this->_evento->getEventos(null, $idTrabajo);  
+            $this->_view->_trabajoSeleccionado = $idTrabajo;      
+            $this->_view->_evento = $evento;
+            
+            $areas = $this->_area->getAreas(null, $idEvento);
+            $this->_view->_eventoSeleccionado = $idEvento;
+            $this->_view->_areas = $areas;
+            
+            $servicios = $this->_servicio->getServicios(null, $idArea);
+            $this->_view->_areaSeleccionada = $idArea;
+            $this->_view->_servicios = $servicios;
+            
+            $niveles = $this->_nivel->getNiveles(null, $idServicio);
+            $this->_view->_servicioSeleccionado = $idServicio;
+            $this->_view->_niveles = $niveles;
+            
+        }
+    
         $this->_view->renderizaCenterBox('solicitudTarea');
+    
     }
 
     public function abreModificaModulo($id) {
@@ -533,193 +577,118 @@ class moduloController extends Controller {
         }
     }
 
-    private function validaSolicitud($descripcionProblema, $solucionPropuesta, $proyecto, $evento, $trabajo, $nivel, $servicio, $area) {
-//        if ($proyecto == 0 || $proyecto == null) {
-//            return false;
-//        }
-//        if ($evento == 0 || $evento == null) {
-//            return false;
-//        }
+    private function validaCamposSolicitud($array) {
 
-        if ($descripcionProblema == "" || $descripcionProblema == null) {
-            return false;
-        }
-        if ($solucionPropuesta == "" || $solucionPropuesta == null) {
-            return false;
-        }
-//        if ($trabajo == 0 || $trabajo == null) {
-//            return false;
-//        }
-//        if ($nivel == 0 || $nivel == null) {
-//            return false;
-//        }
-        if ($servicio == 0 || $servicio == null) {
-            return false;
-        }
-//        if ($area == 0 || $area == null) {
-//            return false;
-//        }
+        foreach ($array as $value) {
 
-
+            if ($value == "0" || $value == null) {
+                return false;
+            }
+        }
         return true;
     }
 
     public function insertSolicitud() {
-        try {
 
-            //Verificamos si efectivamente seleccionó un archivo
-            if (!isset($_FILES['archivo']) || $_FILES['archivo']['error'] == UPLOAD_ERR_NO_FILE) {
-                if ($this->ingresarSolicitud() == TRUE) {
-                    echo "OK";
-                }
-            } else {
+        $descripcionProblema = $this->getTexto("txtDescripcion");
+        $solucionPropuesta = $this->getTexto("txtSolucion");
+        $servicio = 1;
+//        $area = $this->getTexto("selectArea");
+//        $proyecto = $this->getTexto("selectProyecto");
+//        $evento = $this->getTexto("selectEvento");
+//        $trabajo = $this->getTexto("selectTrabajo");
+//        $nivel = $this->getTexto("selectNivel");
+        $path = ROOT . 'subidas\\';
 
-                if ($this->ingresarSolicitud() == TRUE) {
-                    $valid_extensions = array('xls', 'xlsx', 'xlsm', 'xlsb', 'xltx', 'xltm', 'xlt', 'xml', 'xlw', 'xla', 'xlam',
-                        'doc', 'docx', 'dotx', 'dot', 'txt', 'pdf');
+        $array = array($descripcionProblema, $solucionPropuesta, $servicio, Session::get('SESS_ID_USER'));
 
-                    $path = ROOT . 'subidas\\';
+        $valido = $this->validaCamposSolicitud($array);
 
+        if ($valido) {
 
-                    $img = $_FILES['archivo']['name'];
-                    $tmp = $_FILES['archivo']['tmp_name'];
+            $this->ingresarSolicitud($array);
+            
+            $msj = "";
+            
+            $archivo = $_FILES['archivo'];
+            $archivoAdjunto = isset($archivo) && $archivo['error'] != UPLOAD_ERR_NO_FILE;
+            
+            if ($archivoAdjunto && !file_exists($archivo)) {
 
-                    // obtenemos la extensión
-                    $ext = strtolower(pathinfo($img, PATHINFO_EXTENSION));
+                $tamano = $archivo['size'] > 20000;
 
-                    //campos para verificar que estamos asociando el documento a la tarea indicada
-                    $descripcionProblema = $this->getTexto("txtDescripcion");
-                    $solucionPropuesta = $this->getTexto("txtSolucion");
+                if ($tamano) {
+                    echo "El tamaño del archivo supera al permitido";            
+                } else {
 
-                    //traemos el id de la tarea ingresada anteriormente
+                    $img = $archivo['name'];
+                    $tmp = $archivo['tmp_name'];
+                    $ext = strtolower(pathinfo($img, PATHINFO_EXTENSION));                 
+
+                    $valid_extensions = array('xls'
+                        , 'xlsx'
+                        , 'xlsm'
+                        , 'xlsb'
+                        , 'xltx'
+                        , 'xltm'
+                        , 'xlt'
+                        , 'xml'
+                        , 'xlw'
+                        , 'xla'
+                        , 'xlam'
+                        , 'doc'
+                        , 'docx'
+                        , 'dotx'
+                        , 'dot'
+                        , 'txt'
+                        , 'pdf');
+
                     $tarea = $this->_tarea->getTarea(null, $descripcionProblema, $solucionPropuesta);
                     $id = $tarea[0]->getIdTarea();
 
-                    // id de la solicitud + el nombre del archivo subido
                     $final_image = $id . " - " . $img;
 
-                    // verificamos el formato correcto
                     if (in_array($ext, $valid_extensions)) {
-                        $path = $path . strtolower($final_image);
-
-                        if (move_uploaded_file($tmp, $path)) {
-                            //ha sido movido correctamente al servidor                                                    
-                            if ($this->_archivo->ingresar($id, $path)) {
-                                echo "OK";
-                            }
-                        }
+                        $path = $path . strtolower($final_image);                        
+                        try{
+                            move_uploaded_file($img, $path);
+                            $this->_archivo->ingresar($id, $path);                                                         
+                        } catch (Exception $ex) {
+                               $msj = $ex;
+                        }       
                     } else {
-                        echo 'Archivo inválido, sólo es permitido formato Excel y Word';
+                        $msj = "Archivo inválido, sólo es permitido formato Excel, Word y PDF";
                     }
                 }
             }
-        } catch (mysqli_sql_exception $ex) {
-            echo $ex;
+            
+            if ($msj != null) {
+                echo $msj;
+            }else{
+                echo "OK";
+            }
+            
+        } else {
+            echo "Debe seleccionar/ingresar los campos requeridos";
         }
     }
 
-    public function ingresarSolicitud() {
+    public function ingresarSolicitud($array) {
 
+        $sql = "INSERT INTO tarea(`descripcionProblema`,`solucionPropuesta`,`estado_idEstado`,`servicio_idServicio`,`fechaReporte`,`idUsuarioAsigna`)
+            VALUES('" . $array[0] . "', '" . $array[1] . "', 1 , " . $array[2] . ", current_timestamp() , " . Session::get('SESS_ID_USER') . ")";
 
-        $fechaReporte = date('d/m/Y');
-        $horaReporte = date('H:i:s');
-        $descripcionProblema = $this->getTexto("txtDescripcion");
-        $solucionPropuesta = $this->getTexto("txtSolucion");
-        $proyecto = $this->getTexto("selectProyecto");
-        $evento = $this->getTexto("selectEvento");
-        $trabajo = $this->getTexto("selectTrabajo");
-        $nivel = $this->getTexto("selectNivel");
-        $servicio = $this->getTexto("selectServicio");
-        $area = $this->getTexto("selectArea");
+        $consulta = $this->_tarea->exeSQL($sql);
 
-        $horas = 0;
-        $ultTareaDao = $this->_tarea->getUltTarea();
-        if ($ultTareaDao) {
-            $ultimoId = $ultTareaDao[0]->getIdTarea();
-        }
-
-        //$ultimoId = mysql_insert_id();
-        //Oportunidad de mejora, por temas de no hacer llamadas a la base de datos en temas de traer el detalle del nombre de la prioridad y de la mejora
-        //solo se van hacer validaciones directas en el codigo JRR 09/03/2016
-//        $nombrePrioridad = '';
-//        $nombreTipologia = '';
-//        if ($prioridad == '1') {
-//            $nombrePrioridad = 'Urgente';
-//        }
-//        if ($prioridad == '2') {
-//            $nombrePrioridad = 'Alta';
-//        }
-//        if ($prioridad == '3') {
-//            $nombrePrioridad = 'Normal';
-//        }
-//        if ($tipologia == '1') {
-//            $nombreTipologia = 'Falla';
-//        }
-//        if ($tipologia == '2') {
-//            $nombreTipologia = 'Incidencia';
-//        }
-//        if ($tipologia == '3') {
-//            $nombreTipologia = 'Mejora';
-//        }
-//
-//        //Matriz de prioridad y de tipología para establecer las horas correspondientes
-//
-//        if ($prioridad == '1' && $tipologia == '1') {
-//            $horas = 3.5;
-//        }
-//        if ($prioridad == '1' && $tipologia == '2') {
-//            $horas = 8;
-//        }
-//        if ($prioridad == '1' && $tipologia == '3') {
-//            $horas = 0;
-//        }
-//        if ($prioridad == '2' && $tipologia == '1') {
-//            $horas = 1.5;
-//        }
-//        if ($prioridad == '2' && $tipologia == '2') {
-//            $horas = 12;
-//        }
-//        if ($prioridad == '2' && $tipologia == '3') {
-//            $horas = 0;
-//        }
-//        if ($prioridad == '3' && $tipologia == '1') {
-//            $horas = 8;
-//        }
-//        if ($prioridad == '3' && $tipologia == '2') {
-//            $horas = 24;
-//        }
-//        if ($prioridad == '3' && $tipologia == '3') {
-//            $horas = 0;
-//        }
-        //echo $tipologia.'<-Tipologia Prioridad->'.$prioridad.' Horas='.$horas;
-
-        if (!$this->validaSolicitud($descripcionProblema, $solucionPropuesta, $proyecto, $evento, $trabajo, $nivel, $servicio, $area)) {
-            echo "Debe ingresar/seleccionar los campos requeridos";
-            return false;
+        if ($consulta) {
+            return true;
         } else {
-
-            $sql = "INSERT INTO tarea(`descripcionProblema`,`solucionPropuesta`,`estado_idEstado`,`servicio_idServicio`,`fechaReporte`,`idUsuarioAsigna`)
-                VALUES('" . $descripcionProblema . "', '" . $solucionPropuesta . "', 1 , " . $servicio . ", current_timestamp() , " . Session::get('SESS_ID_USER') . ")";
-
-
-            $consulta = $this->_tarea->exeSQL($sql);
-            if ($consulta) {
-
-                return true;
-//                if ($this->correo($nombreTicket, $descripcionProblema, $fechaReporte, $horaReporte, 'Solicitud de tarea', Session::get('SESS_NOMBRE'), Session::get('SESS_CORREO'), $nombrePrioridad, $nombreTipologia, $ultimoId)
-//                ) {
-//                    echo "OK";
-//                } else {
-//                    echo "No se pudo enviar el correo";
-//                }
-            } else {
-                echo 'No se pudo insertar la tarea';
-                return false;
-            }
+            return false;
         }
     }
 
     public function modificaHito() {
+
         $id = $this->getTexto('Mm_id_hito');
 //        $vigencia = $this->getTexto('Mm_vigencia');
         $nombre = $this->getTexto('Mm_nombre_hito');

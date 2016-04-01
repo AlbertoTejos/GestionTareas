@@ -17,54 +17,81 @@
 
         <div class="col-md-12">
             <div class="form-group">
-                <label>Proyecto</label>
-                <select id="proyecto" name="selectProyecto" class="form-control"  required>
-                    <option value="1">Seleccione un Proyecto</option>
-                    <?php
-                    if ($this->_getModulo) {
-                        foreach ($this->_getModulo as $mod) {
-                            ?>
-                            <option value="<?php echo $mod->getId_producto() ?>"><?php echo utf8_decode($mod->getNombre()) ?></option>
-                            <?php
+                <label class="control-label">Proyecto</label>
+                <select class="form-control" id="selectProyecto" name="selectProyecto" id="selectProyecto" onchange="cargarTrabajos(this)">
+                    <option value="">Seleccione un Proyecto...</option>
+                    <?php if ($this->_proyectos) {
+                        foreach ($this->_proyectos as $p){ 
+                            if($p->getId_producto() == $this->_proyectoSeleccionado){?>
+                                 <option selected value="<?php echo $p->getId_producto() ?>"><?php echo $p->getNombre() ?></option>
+                            <?php }else { ?>
+                            <option value="<?php echo $p->getId_producto() ?>"><?php echo $p->getNombre() ?></option>
+                        <?php }    }              
+                    } ?>
+                </select>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="form-group">
+                <label class="control-label">Trabajo</label>
+                <select class="form-control"  name="selectTrabajo" id="selectTrabajo" onchange="cargarEventos(this)">
+                    <option value="">Seleccione un Trabajo...</option>
+                    <?php if ($this->_trabajo) {
+                        
+                        foreach ($this->_trabajo as $t) { 
+                            if($t->getIdHito() == $this->_trabajoSeleccionado){ ?>
+                                 <option selected value="<?php echo $t->getIdHito() ?>"><?php echo $t->getNombre() ?></option>
+                            <?php }else { ?>                                              
+                            <option value="<?php echo $t->getIdHito() ?>"><?php echo $t->getNombre() ?></option>                                        
+                        <?php  } }
+                    } ?>
+                </select>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="form-group">
+                <label class="control-label">Evento</label>
+                <select class="form-control" name="selectEvento" onchange="cargarAreas(this)">
+                    <option value="">Seleccione un Evento...</option>
+                    <?php if ($this->_evento) {
+                        foreach ($this->_evento as $e) { 
+                            if($e->getIdEvento() == $this->_eventoSeleccionado){ ?>
+                                 <option selected value="<?php echo $e->getIdEvento() ?>"><?php echo $e->getNombreEvento() ?></option>
+                            <?php }else { ?>                                              
+                            <option value="<?php echo $e->getIdEvento() ?>"><?php echo $e->getNombreEvento() ?></option>                                        
+                    <?php  } 
                         }
-                    }
-                    ?>
+                    } ?>
+                </select>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="form-group">
+                <label class="control-label">Área</label>
+                <select class="form-control" name="selectArea" onchange="cargarServicios(this)">
+                    <option value="">Seleccione un Área...</option>
+                    <?php if ($this->_areas) {
+                        foreach ($this->_areas as $a) {
+                            if($a->getIdArea() == $this->_areaSeleccionada){ ?>
+                                 <option selected value="<?php echo $a->getIdArea() ?>"><?php echo $a->getNombre() ?></option>
+                            <?php }else { ?> 
+                            <option value="<?php echo $a->getIdArea() ?>"><?php echo $a->getNombre() ?></option>                                        
+                        <?php  } }
+                    } ?>
                 </select>
             </div>
         </div>
 
         <div class="col-md-12">
             <div class="form-group">
-                <label>Trabajo</label>
-                <select name="selectTrabajo" class="form-control">
-                    <option value="">Seleccione un Trabajo</option> 
-                </select>
-            </div>
-        </div>
-
-        <div class="col-md-12">
-            <div class="form-group">
-                <label>Evento</label>
-                <select name="selectEvento" class="form-control">
-                    <option value="">Seleccione un Evento</option> 
-                </select>
-            </div>
-        </div>
-
-        <div class="col-md-12">
-            <div class="form-group">
-                <label>Área de Servicio</label>
-                <select name="selectArea" class="form-control">
-                    <option value="">Seleccione un Área</option> 
-                </select>
-            </div>
-        </div>
-
-        <div class="col-md-12">
-            <div class="form-group">
-                <label>Servicio</label>
-                <select name="selectServicio" class="form-control">
-                    <option value="1">Seleccione un Servicio</option> 
+                <label class="control-label">Servicio</label>
+                <select class="form-control" name="selectServicio" onchange="cargarNiveles(this)">
+                    <option value="">Seleccione un Servicio...</option>
+                    <?php if ($this->_servicios) {
+                        foreach ($this->_servicios as $s) { ?>                                              
+                            <option value="<?php echo $s->getIdServicio() ?>"><?php echo $s->getNombreServicio() ?></option>                                        
+                    <?php  } 
+                    } ?>
                 </select>
             </div>
         </div>
@@ -72,8 +99,13 @@
         <div class="col-md-12">
             <div class="form-group">
                 <label>Nivel de Criticidad</label>
-                <select name="selectNivel" class="form-control">
-                    <option value="">Seleccione un Nivel</option> 
+                <select class="form-control" name="selectNivel">
+                    <option value="">Seleccione un Nivel...</option>
+                    <?php if ($this->_niveles) {
+                        foreach ($this->_niveles as $n) { ?>                                              
+                            <option value="<?php echo $n->getIdNivel() ?>"><?php echo $n->getNombreNivel() ?></option>                                        
+                    <?php  } 
+                    } ?>
                 </select>
             </div>
         </div>
@@ -220,3 +252,52 @@
 
     </div>
 </form>
+
+<script>
+    
+    function cargarTrabajos(s){
+      
+        var idProyecto = s[s.selectedIndex].value; 
+        
+        Servicio.prototype.abreModal('<?php echo BASE_URL ?>/modulo/abreSolicitudTareas/'+idProyecto, 'Crear nueva solicitud de tarea', '');
+    }
+    
+    function cargarEventos(s){
+        
+        var idProyecto = $( "#selectProyecto" ).val();
+        var idTrabajo = s[s.selectedIndex].value; 
+        
+        Servicio.prototype.abreModal('<?php echo BASE_URL ?>/modulo/abreSolicitudTareas/'+ idProyecto + '/' + idTrabajo, 'Crear nueva solicitud de tarea', '');
+    }
+    
+    function cargarAreas(s){
+        
+        var idProyecto = $( "#selectProyecto" ).val();
+        var idTrabajo = $( "#selectTrabajo" ).val();
+        var idEvento = s[s.selectedIndex].value; 
+        
+        Servicio.prototype.abreModal('<?php echo BASE_URL ?>/modulo/abreSolicitudTareas/'+ idProyecto + '/' + idTrabajo + '/' + idEvento, 'Crear nueva solicitud de tarea', '');
+    }
+    
+    function cargarServicios(s){
+        
+        var idProyecto = $( "#selectProyecto" ).val();
+        var idTrabajo = $( "#selectTrabajo" ).val();
+        var idEvento = $( "#selectEvento" ).val();
+        var idArea = s[s.selectedIndex].value;
+        
+        Servicio.prototype.abreModal('<?php echo BASE_URL ?>/modulo/abreSolicitudTareas/'+ idProyecto + '/' + idTrabajo + '/' + idEvento + '/' + idArea, 'Crear nueva solicitud de tarea', '');
+    }
+    
+    function cargarNiveles(s){
+        
+        var idProyecto = $( "#selectProyecto" ).val();
+        var idTrabajo = $( "#selectTrabajo" ).val();
+        var idEvento = $( "#selectEvento" ).val();
+        var idArea = $( "#selectArea" ).val();
+        var idServicio = s[s.selectedIndex].value;
+        
+        Servicio.prototype.abreModal('<?php echo BASE_URL ?>/modulo/abreSolicitudTareas/'+ idProyecto + '/' + idTrabajo + '/' + idEvento + '/' + idArea + '/' + idServicio, 'Crear nueva solicitud de tarea', '');
+    }
+    
+</script>

@@ -13,13 +13,17 @@
  */
 class nivelDAO extends Model {
     
-    function getNiveles($id = null) {
+    function getNiveles($id = null, $idProyecto = null) {
         $sql = "select n.idNivel, n.nombre, n.tiempoMaximo, n.producto_idProducto, p.nombre as nombreProducto from nivel n"
                 . " inner join producto p on p.idProducto = n.producto_idProducto";
         
         if ($id != null) {
             $sql .= " where n.idNivel = " . $id;
-        }      
+        }
+        
+        if ($idProyecto != null) {
+            $sql .= " where p.idProducto = " . $idProyecto;
+        }
         
         //Realizamos la consulta
         $datos = $this->_db->consulta($sql);
